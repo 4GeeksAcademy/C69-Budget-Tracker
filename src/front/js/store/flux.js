@@ -5,6 +5,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 
+
+
+			// forgot password action
+
+
+
+			// reset password action
+
 			signUp: async (newUser) => {
 				try {
 					const response = await fetch(process.env.BACKEND_URL + "/api/signup", {
@@ -24,19 +32,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return true;
 				} catch (error) {
 					console.error("please try again later", error);
-					throw error;
+					throw error
 				}
 
 			},
 
-			login: async (user) => {
+			
+
+			login: async (email, password) => {
 				try {
 					const response = await fetch(process.env.BACKEND_URL + "/api/login", {
 						method: "POST",
-						body: json.stringify({
-							email: user.email,
-							password: user.password
-						}),
+						body: JSON.stringify({email, password}),
 						headers: { "Content-Type": "application/json" }
 					})
 					const data = await response.json();
