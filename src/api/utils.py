@@ -33,7 +33,7 @@ def generate_sitemap(app):
 
     links_html = "".join(["<li><a href='" + y + "'>" + y + "</a></li>" for y in links])
     return """
-        <div style="text-align: center;">
+        <div style="text-align: center; background-color: darkblue; color:white; min-height: 100vh">
         <img style="max-height: 80px" src="https://images-platform.99static.com//z4BqPC9Bu3rQlTQJpj78dqV7mk0=/235x62:790x617/fit-in/500x500/projects-files/112/11212/1121273/fb2b92b8-30c0-46cb-8db9-9bbd0dd83c1c.jpg" />
         <h1>Welcome to the API</h1>
         <p>API HOST: <script>document.write('<input style="padding: 5px; width: 300px" type="text" value="'+window.location.href+'" />');</script></p>
