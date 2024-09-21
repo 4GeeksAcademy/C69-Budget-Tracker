@@ -18,14 +18,14 @@ export const Navbar = () => {
 	return (
 		<nav className="navbar navbar-light bg-light">
 			<div className="container">
-				<Link to="/">
+				<Link to="/dashboard">
 					<span className="navbar-brand mb-0 h1">Home</span>
 				</Link>
 				<div className="ml-auto">
 					{isLoggedIn ? (
 						<button onClick={handleLogout} className="btn btn-primary">Logout</button>
 					) : (
-						<Link to="/login">
+						<Link to="/">
 							<button className="btn btn-primary">Login</button>
 						</Link>
 					)}
