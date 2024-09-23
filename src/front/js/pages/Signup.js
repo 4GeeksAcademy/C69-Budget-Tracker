@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 
+
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +24,7 @@ export default function Signup() {
       console.log(success)
       if (success) {
         alert("Signup successful! Please login.");
-        navigate("/login");
+        navigate("/dashboard");
       } 
     }
 

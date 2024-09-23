@@ -1,15 +1,16 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
+import injectContext from "./store/appContext";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { BackendURL } from "./component/backendURL";
 
-import Home from "./pages/home";
-
+import Home from "./pages/Home.js";
 import Signup from "./pages/Signup.js"
 import ForgotPassword from "./pages/ForgotPassword.js";
-import Private from "./pages/Private.js";
+import Profile from "./pages/Profile.js";
 import Dashboard from "./pages/Dashboard.js";
-import injectContext from "./store/appContext";
+import Add from "./pages/Add.js";
+import Edit from "./pages/Edit.js";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
@@ -26,18 +27,21 @@ const Layout = () => {
         <div>
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
-                    <Navbar />
+                    <Navbar>
                     <Routes>
                     
-                        <Route element={<Home />} path="/" />
                         <Route element={<h1>Not found!</h1>} path="*" />
+                        <Route element={<Home />} path="/" />
                         <Route element={<Signup />} path="/signup" />
                         <Route element={<ForgotPassword />} path="/forgotpassword" />
-                        <Route element={<Private />} path="/private" /> 
+                        <Route element={<Profile />} path="/profile" /> 
                         <Route element={<Dashboard />} path="/dashboard" />
+                        <Route element={<Add />} path="/add" />
+                        <Route element={<Edit />} path="/edit" />
                         
                     </Routes>
                     <Footer />
+                    </Navbar>
                 </ScrollToTop>
             </BrowserRouter>
         </div>

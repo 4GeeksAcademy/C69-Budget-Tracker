@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 
 
+
 export default function Home() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -13,7 +14,7 @@ export default function Home() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const success = await actions.login(email, password)
-        if (success) navigate("/"); 
+        if (success) navigate("/dashboard"); 
     }
     
     return (
