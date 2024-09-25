@@ -12,7 +12,10 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const success = await actions.login(email, password)
+        const success = await actions.login({
+            email: email.toLowerCase(),
+            password: password
+        })
         if (success) navigate("/"); 
     }
     

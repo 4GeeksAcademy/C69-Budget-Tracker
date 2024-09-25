@@ -23,8 +23,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}),
 						headers: { "Content-Type": "application/json" }
 					})
+					console.log("response from signup:", response)
 					const data = await response.json();
-					if (response.status !== 201) {
+					if (!response.ok) {
 						alert(data.message);
 						return false
 					};

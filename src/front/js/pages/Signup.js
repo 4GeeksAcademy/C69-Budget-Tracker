@@ -16,7 +16,7 @@ export default function Signup() {
       // return;
     } else {
       const success = await actions.signUp({
-        email: email,
+        email: email.toLowerCase(),
         password: password
       });
       console.log(success)
