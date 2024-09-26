@@ -9,8 +9,11 @@ import Login from "./pages/Login.js"
 import Signup from "./pages/Signup.js"
 import injectContext from "./store/appContext";
 
-import { Navbar } from "./component/navbar";
+import { NavbarComponent } from "./component/navbar";
 import { Footer } from "./component/footer";
+
+// Import Bootstrap CSS
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 //create your first component
 const Layout = () => {
@@ -18,22 +21,18 @@ const Layout = () => {
     // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
 
-    if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
+    if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
         <div>
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
-                    <Navbar />
+                    <NavbarComponent />
                     <Routes>
-                    
                         <Route element={<Home />} path="/" />
                         <Route element={<h1>Not found!</h1>} path="*" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<Signup />} path="/signup" />
-                        {/* <Route element={<Private />} path="/private" /> */}
-                        
-                    
                     </Routes>
                     <Footer />
                 </ScrollToTop>
