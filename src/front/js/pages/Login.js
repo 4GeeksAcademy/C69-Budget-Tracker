@@ -12,7 +12,7 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const success = await actions.login(email, password)
+        const success = await actions.login( email, password )
         if (success) navigate("/"); 
     }
     
@@ -45,9 +45,11 @@ export default function Login() {
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
                                     />
+                                    <Link to="/forgot-password">Forgot Password?</Link>
                                 </div>
                                 <button type="submit" className="btn btn-primary w-100">Login</button>
-                                <Link className="" to="/signup"><p className='text-center mt-4'>Click here to sign up</p></Link>
+                                <Link to="/signup"><p className='text-center mt-4'>Click here to sign up</p></Link>
+
                             </form>
                         </div>
                     </div>
