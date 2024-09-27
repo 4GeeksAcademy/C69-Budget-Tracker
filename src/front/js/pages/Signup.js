@@ -23,7 +23,7 @@ export default function Signup() {
       if (success) {
         alert("Signup successful! Please login.");
         navigate("/login");
-      } 
+      }
     }
 
 
