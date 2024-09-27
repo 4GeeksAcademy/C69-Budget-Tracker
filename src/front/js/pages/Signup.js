@@ -16,14 +16,14 @@ export default function Signup() {
       // return;
     } else {
       const success = await actions.signUp({
-        email: email.toLowerCase(),
+        email: email,
         password: password
       });
       console.log(success)
       if (success) {
         alert("Signup successful! Please login.");
         navigate("/login");
-      } 
+      }
     }
 
 
