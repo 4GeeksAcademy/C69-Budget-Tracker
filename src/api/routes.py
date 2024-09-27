@@ -89,7 +89,7 @@ def reset_password(token):
     password=data.get("password")
 
     try:
-        decoded_token=jwt.decode(token, os.getenv("FLASK_APP_KEY"), algorithm=["HS256"])
+        decoded_token=jwt.decode(token, os.getenv("FLASK_APP_KEY"), algorithms=["HS256"])
         email=decoded_token.get("email")
     except jwt.ExpiredSignatureError:
         return jsonify({"message": "Token has expired" }), 400
