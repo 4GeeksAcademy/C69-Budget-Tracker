@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container, Dropdown } from 'react-bootstrap';
 import { PersonCircle, List } from 'react-bootstrap-icons';
 
 // Note: If you have the logo, uncomment the following line and update the path
@@ -38,19 +38,20 @@ export const NavbarComponent = () => {
             <Nav.Link as={Link} to="/savings-goal" className="text-dark me-4">Savings Goal</Nav.Link>
             <Nav.Link as={Link} to="/budget-tracker" className="text-dark">Budget Tracker</Nav.Link>
           </Nav>
-          <div className="d-flex align-items-center">
-            <div className="d-flex align-items-center justify-content-between border rounded-pill px-3 py-2 me-3" style={{width: '85px'}}>
-              <List size={20} className="text-dark" />
-              <PersonCircle size={20} className="text-dark" />
-            </div>
-            {isLoggedIn ? (
-              <button onClick={handleLogout} className="btn btn-primary">Logout</button>
-            ) : (
-              <Link to="/login">
-                <button className="btn btn-primary">Login</button>
-              </Link>
-            )}
-          </div>
+          <Dropdown>
+            <Dropdown.Toggle as="div" id="dropdown-basic" className="d-flex align-items-center justify-content-between rounded-pill px-3 py-2" style={{width: '85px', cursor: 'pointer', backgroundColor: '#007bff', color: 'white'}}>
+              <List size={20} className="text-white" />
+              <PersonCircle size={20} className="text-white" />
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu align="end">
+              {isLoggedIn ? (
+                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+              ) : (
+                <Dropdown.Item as={Link} to="/login">Login</Dropdown.Item>
+              )}
+            </Dropdown.Menu>
+          </Dropdown>
         </Navbar.Collapse>
       </Container>
     </Navbar>

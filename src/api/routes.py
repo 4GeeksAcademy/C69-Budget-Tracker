@@ -1,7 +1,5 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 
-
-
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
@@ -13,15 +11,10 @@ import os
 from datetime import datetime, timedelta
 import jwt
 
-
-
-
-
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
-
 
 @api.route('/signup', methods=['POST'])
 def sign_up():
@@ -39,7 +32,6 @@ def sign_up():
     db.session.add(new_user)
     db.session.commit()
     
-
     response_body = {
         "message": "User successfully created",
         "user": new_user.serialize() 
@@ -65,7 +57,6 @@ def login():
     )
     return jsonify({"token": access_token}), 200
 
-
 @api.route("/forgot-password", methods=["POST"])
 def forgot_password(): 
     email=request.json.get("email")
@@ -80,8 +71,6 @@ def forgot_password():
     email_value=f"Click here to reset password.\n{os.getenv('FRONTEND_URL')}/forgot-password?token={token}"
     send_email(email, email_value, "password recover: Koyo")
     return jsonify({"message": "recovery email sent"}), 200
-    
-
 
 @api.route("/reset-password/<token>", methods=["PUT"])
 def reset_password(token):
@@ -105,7 +94,3 @@ def reset_password(token):
 
     send_email(email, "password successfully reset", "password reset confirmation for Koyo")
     return jsonify({"message": "password reset email sent"}), 200
-
-
-
-    
