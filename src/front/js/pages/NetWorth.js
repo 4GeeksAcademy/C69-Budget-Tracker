@@ -13,8 +13,8 @@ export default function NetWorth() {
     return (
         <div className="text-center mt-5">
             <BudgetPanel title={"Net Worth"} total={"720,000"} lastUpdated={"n/a"} />
-            <BudgetPanel title={"Total Debt/Liabilities"} total={"5,660,000.00"} lastUpdated={"n/a"} edit={"edit/update"} />
-            <BudgetPanel title={"Total Assets/Income"} total={"6,380,000.00"} lastUpdated={"n/a"} edit={"edit/update"} />
+            <BudgetPanel title={"Total Debt/Liabilities"} total={"5,660,000.00"} lastUpdated={"n/a"} edit={"edit/update"} name={"liabilities"} />
+            <BudgetPanel title={"Total Assets/Income"} total={"6,380,000.00"} lastUpdated={"n/a"} edit={"edit/update"} name={"assets"} />
         </div>
     );
 };
