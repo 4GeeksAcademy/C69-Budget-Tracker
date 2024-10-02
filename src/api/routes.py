@@ -1,5 +1,5 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 from flask import Flask, request, jsonify, url_for, Blueprint
@@ -108,4 +108,144 @@ def reset_password(token):
 
 
 
+    # Asset routes
+# C
+
+def create_asset():
+    current_user = get_jwt_identity() 
+    user = User.query.filter_by(email=current_user).first()
+
+    category = request.json.get("category")
+    amount = request.json.get("amount")
+    description = request.json.get("description")
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
     
+    new_asset = Asset(
+        user_id=user.id,
+        category=category,
+        amount=amount,
+        description=description
+    )
+
+    db.session.add(new_asset)
+    db.session.commit()
+
+    return jsonify(new_asset.serialize()), 201
+
+
+# R
+
+def get_assets():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    assets = Asset.query.filter_by(user_id=user.id).all()
+    return jsonify({asset.serialize() for asset in assets}), 200
+
+# U
+
+def update_asset(asset_id):
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    asset = asset.query.get(asset_id)
+    if not asset or asset.user_id != user.id:
+        return jsonify({"message": "Asset not found or unauthorized"}), 404
+    
+    asset.category = request.json.get("category", asset.category)
+    asset.amount = request.json.get("amount", asset.amount)
+    asset.description = request.json.get("description", asset.description)
+    asset.last_updated = datetime.utcnow()
+
+    db.session.commit()
+    return jsonify(asset.serialize()), 200
+
+# D
+
+def delete_asset(asset_id):
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    asset = asset.query.get(asset_id)
+    if not asset or asset.user_id != user.id:
+        return jsonify({"message": "Asset not found or unauthorized"}), 404
+    
+    db.session.delete(asset)
+    db.session.commit()
+    return jsonify({"message": "Asset deleted"}), 200
+
+    # Liability routes
+# C
+
+def create_liability():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    category = request.json.get("category")
+    amount = request.json.get("amount")
+    description = request.json.get("description")
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    new_liability = Liability(
+        user_id=user.id,
+        category=category,
+        amount=amount,
+        description=description
+    )
+
+    db.session.add(new_liability)
+    db.session.commit()
+
+    return jsonify(new_liability.serialize()), 201
+
+# R
+
+def get_liabilities():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    liabilities = Liability.query.filter_by(user_id=user.id).all()
+    return jsonify([liability.serialize() for liability in liabilities]), 200
+
+# U
+
+def update_liability(liability_id):
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    liability = Liability.query.get(liability_id)
+    if not liability or liability.user_id != user.id:
+        return jsonify({"message": "Liability not found or unauthorized"}), 404
+    
+    liability.category = request.json.get("category", liability.category)
+    liability.amount = request.json.get("amount", liability.amount)
+    liability.description = request.json.get("description", liability.description)
+    liability.last_updated = datetime.utcnow()
+
+    db.session.commit()
+    return jsonify(liability.serialize()), 200
+
+# D
+
+def delete_liability(liability_id):
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    liability = Liability.query.get(liability_id)
+    if not liability or liability.user_id != user.id:
+        return jsonify({"message": "Liability not found or unauthorized"}), 404
+    
+    db.session.delete(liability)
+    db.session.commit()
+    return jsonify({"message": "Liability deleted"}), 200
+
