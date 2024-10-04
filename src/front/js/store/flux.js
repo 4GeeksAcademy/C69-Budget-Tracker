@@ -20,7 +20,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({
 							email: newUser.email.toLowerCase(),
-							password: newUser.password
+							password: newUser.password,
+							username: newUser.username,
+							phone: newUser.phone,
+							text_notification: newUser.text_notification,
+							text_frequency: newUser.text_frequency
 					}),
 					})
 					console.log("response from signup:", response)
@@ -32,8 +36,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(data);
 					return true;
 				} catch (error) {
-					// console.error("please try again later", error);
-					throw error
+					console.error("Error during signup", error);
+					alert("Something went wrong, try again later");
+					return false;
 				}
 
 			},
