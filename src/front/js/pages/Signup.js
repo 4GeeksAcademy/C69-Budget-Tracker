@@ -10,8 +10,8 @@ export default function Signup() {
     confirmPassword: "",
     username: "",
     phone: "",
-    text_notification: "",
-    text_frequency: "",
+    text_notification: false,
+    text_frequency: "none",
   })
   // const [error, setError] = useState(null);
   const { actions } = useContext(Context);
@@ -24,16 +24,23 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // setError(null);
-    if (password !== confirmPassword) {
+    console.log("Password: ", userData.password);
+    console.log("Confirm Password: ", userData.confirmPassword);
+
+
+    if (userData.password !== userData.confirmPassword) {
       alert("Passwords do not match");
       return;
     } else {
       const success = await actions.signUp({
         email: userData.email,
         password: userData.password,
+        username: userData.username,
+        phone: userData.phone,
+        text_notification: userData.text_notification,
+        text_frequency: userData.text_notification ? userData.text_frequency : "none"
         
-        // TODO 
+        
 
       });
       console.log(success)
@@ -68,6 +75,40 @@ export default function Signup() {
                     // add userData from above: Value:userData. / 
                   />
                 </div>
+
+
+
+               {/* Username Field */}
+               <div className="mb-3">
+                  <label htmlFor="username" className="form-label">Username</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="username"
+                    name="username"
+                    value={userData.username}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                 {/* Phone Number Field */}
+                 <div className="mb-3">
+                  <label htmlFor="phone" className="form-label">Phone Number</label>
+                  <input
+                    type="tel"
+                    className="form-control"
+                    id="phone"
+                    name="phone"
+                    value={userData.phone}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+
+
+                  {/* Password fields */}
                 <div className="mb-3">
                   <label htmlFor="password" className="form-label">Password</label>
                   <input
@@ -92,6 +133,56 @@ export default function Signup() {
                     required
                   />
                 </div>
+
+                {/* Text Notification Checkbox */}
+                <div className="form-check mb-3">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="text_notification"
+                    name="text_notification"
+                    checked={userData.text_notification}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="text_notification" className="form-check-label">Receive Text Notifications</label>
+                </div>
+
+                {/* Text Frequency Radio Buttons */}
+                {userData.text_notification && (
+                  <div className="mb-3">
+                    <label htmlFor="text_frequency" className="form-label">Text Frequency</label>
+                    <div>
+                      <div className="form-check form-check-inline">
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          id="weekly"
+                          name="text_frequency"
+                          value="weekly"
+                          checked={userData.text_frequency === "weekly"}
+                          onChange={handleChange}
+                        />
+                        <label htmlFor="weekly" className="form-check-label">Weekly</label>
+                      </div>
+                      <div className="form-check form-check-inline">
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          id="monthly"
+                          name="text_frequency"
+                          value="monthly"
+                          checked={userData.text_frequency === "monthly"}
+                          onChange={handleChange}
+                        />
+                        <label htmlFor="monthly" className="form-check-label">Monthly</label>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+
+
+
                 <button type="submit" className="btn btn-primary w-100">Sign Up</button>
               </form>
             </div>

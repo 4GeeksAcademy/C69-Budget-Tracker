@@ -58,7 +58,7 @@ def sign_up():
     new_preferences = UserPreferences(
         user_id = new_user.id,
         text_notification = text_notification,
-        text_frequency = text_frequency,
+        text_frequency = text_notification and text_frequency or "none",
     )
     db.session.add(new_preferences)
     db.session.commit()
