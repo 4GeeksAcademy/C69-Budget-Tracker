@@ -12,6 +12,7 @@ import NetWorth from "./pages/NetWorth.js";
 import Liabilities from "./pages/Liabilities.js";
 import Assets from "./pages/Assets.js";
 import injectContext from "./store/appContext";
+import NewLiability from "./pages/NewLiability";
 
 import { NavbarComponent } from "./component/navbar";
 import { Footer } from "./component/footer";
@@ -39,6 +40,7 @@ const Layout = () => {
                         <Route element={<Dashboard />} path="/dashboard" />
                         {/* <Route element={<NetWorth />} path="/networth" /> */}
                         <Route element={<Liabilities />} path="/liabilities" />
+                        <Route element={<NewLiability />} path="/newliability" />
                         <Route element={<Assets />} path="/assets" />
                         <Route element={<Signup />} path="/signup" />
                         <Route element={<ForgotPassword />} path="/forgot-password" />

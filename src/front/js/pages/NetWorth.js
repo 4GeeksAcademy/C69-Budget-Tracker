@@ -8,10 +8,8 @@ export default function NetWorth() {
     const [welcome, setWelcome] = useState("");
     const [showAddAssetForm, setShowAddAssetForm] = useState(false);
     const [currentTime, setCurrentTime] = useState("");
-
-    const totalAssets = 6380000.00;
-    const totalLiabilities = 5660000.00;
-    const netWorth = totalAssets - totalLiabilities;
+    const [liabilitiesData, setLiabilitiesData] = useState({ total: 0, lastUpdated: null });
+    const [assetsData, setAssetsData] = useState({ total: 0, lastUpdated: null });
 
     useEffect(() => {
         const updateGreeting = () => {
@@ -23,14 +21,62 @@ export default function NetWorth() {
             setCurrentTime(now.toLocaleTimeString());
         };
 
-        updateGreeting(); // Initial call
+        const fetchLiabilities = async () => {
+            try {
+                const response = await fetch("/api/liabilities");
+                if (response.ok) {
+                    const liabilities = await response.json();
+                    const total = liabilities.reduce((sum, liability) => sum + parseFloat(liability.amount), 0);
+                    const lastUpdated = liabilities.reduce((latest, liability) => 
+                        latest > new Date(liability.last_updated) ? latest : new Date(liability.last_updated),
+                        new Date(0)
+                    );
+                    setLiabilitiesData({ total, lastUpdated });
+                } else {
+                    console.error("Failed to fetch liabilities");
+                }
+            } catch (error) {
+                console.error("Error fetching liabilities:", error);
+            }
+        };
+
+        const fetchAssets = async () => {
+            try {
+                const response = await fetch("/api/assets");
+                if (response.ok) {
+                    const assets = await response.json();
+                    const total = assets.reduce((sum, asset) => sum + parseFloat(asset.amount), 0);
+                    const lastUpdated = assets.reduce((latest, asset) => 
+                        latest > new Date(asset.last_updated) ? latest : new Date(asset.last_updated),
+                        new Date(0)
+                    );
+                    setAssetsData({ total, lastUpdated });
+                } else {
+                    console.error("Failed to fetch assets");
+                }
+            } catch (error) {
+                console.error("Error fetching assets:", error);
+            }
+        };
+
+        updateGreeting();
         updateTime();
+        fetchLiabilities();
+        fetchAssets();
+
         const intervalId = setInterval(() => {
             updateGreeting();
             updateTime();
-        }, 60000); // Update every minute
-        return () => clearInterval(intervalId); // Cleanup on component unmount
+        }, 60000);
+
+        return () => clearInterval(intervalId);
     }, []);
+
+    const netWorth = assetsData.total - liabilitiesData.total;
+    const netWorthLastUpdated = new Date(Math.max(
+        assetsData.lastUpdated ? assetsData.lastUpdated.getTime() : 0,
+        liabilitiesData.lastUpdated ? liabilitiesData.lastUpdated.getTime() : 0
+    ));
 
     const getGreeting = () => {
         const hour = new Date().getHours();
@@ -47,14 +93,18 @@ export default function NetWorth() {
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
     };
 
+    const formatDate = (date) => {
+        return date ? date.toLocaleDateString() : 'N/A';
+    };
+
     return (
         <div className="text-center">
             <Header welcome={welcome} name={"Mr. Kean!"} onAddAsset={handleAddAsset} />
             {showAddAssetForm && (<div className="mb-4">Add Asset Form Placeholder</div>)}
             <div style={{ marginTop: '-25px' }}>
-                <BudgetPanel title={"Net Worth"} total={formatCurrency(netWorth)} lastUpdated={"n/a"} />
-                <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(totalLiabilities)} lastUpdated={"n/a"} edit={"edit/update"} name={"liabilities"} />
-                <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(totalAssets)} lastUpdated={"n/a"} edit={"edit/update"} name={"assets"} />
+                <BudgetPanel title={"Net Worth"} total={formatCurrency(netWorth)} lastUpdated={formatDate(netWorthLastUpdated)} />
+                <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(liabilitiesData.total)} lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
+                <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(assetsData.total)} lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />
             </div>
         </div>
     );

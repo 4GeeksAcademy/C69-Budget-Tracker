@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-export default function Header({ welcome, name, onAddAsset, back, page }) {
+export default function Header({ welcome, name, onAddAsset, back, page, add }) {
   const [showAddOptions, setShowAddOptions] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -65,25 +65,30 @@ export default function Header({ welcome, name, onAddAsset, back, page }) {
                 justifyContent: "center",
                 alignItems: "center",
                 background: "none",
-                border: "3.5px solid",
+                border: "2.5px solid",
                 padding: 0,
                 position: "absolute",
                 top: -15,
                 right: 0,
-                zIndex: 1
-              }}>
-              <i className="fa-solid fa-plus fw-bold"></i>
+                zIndex: 2
+              }}><i className="fa-solid fa-plus fw-bold"></i>
             </button>
             {showAddOptions && (
-              <div className="mt-2 bg-black bg-opacity-80 rounded-md shadow-lg z-10" style={{ position: 'absolute', top: '100%', right: 0, width: '150px' }}>
+              <div className="mt-2 border border-light-subtle bg-white rounded-3 shadow fw-semibold text-muted" style={{ 
+                position: 'absolute', 
+                top: '20px', 
+                right: '0', 
+                width: '175px', 
+                zIndex: 1000 
+              }}>
                 <ul
                   onClick={handleAddAssetClick}
-                  className="block px-4 py-2 text-sm text-white hover:bg-white hover:bg-opacity-20 w-full text-left transition-all duration-300"
+                  className="d-flex justify-content-beginning align-items-center block px-4 pt-3 text-sm hover:bg-white hover:bg-opacity-20 w-full text-left transition-all duration-300 cursor-pointer"
                 >
-                  Add Asset
+                  <i class="fa-solid fa-money-bills me-3"></i> Add Asset
                 </ul>
-                <ul className="block px-4 py-2 text-sm text-white hover:bg-white hover:bg-opacity-20 w-full text-left transition-all duration-300">
-                  Add Liability
+                <ul className="d-flex justify-content align-items-center block px-4 text-sm hover:bg-white hover:bg-opacity-20 w-full text-left transition-all duration-300 cursor-pointer">
+                <i class="fa-solid fa-credit-card me-3"></i> Add Liability
                 </ul>
               </div>
             )}

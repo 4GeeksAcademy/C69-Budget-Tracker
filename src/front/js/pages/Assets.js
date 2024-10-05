@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import InformationPanel from "../component/informationPanel";
 import Header from "../component/header";
@@ -6,16 +6,63 @@ import CategoryLabels from "../component/categoryLabels";
 
 export default function Assets() {
     const { store, actions } = useContext(Context);
-//"Back" button and "Add New" button needed at the top of the screen
+    const [assets, setAssets] = useState([]);
 
-//Code needed to update each section with data input by user
+    useEffect(() => {
+        fetchAssets();
+    }, []);
+
+    const fetchAssets = async () => {
+        try {
+            const response = await fetch("/api/assets");
+            if (response.ok) {
+                const data = await response.json();
+                setAssets(data);
+            } else {
+                console.error("Failed to fetch assets");
+            }
+        } catch (error) {
+            console.error("Error fetching assets:", error);
+        }
+    };
+
+    const addNewAsset = async () => {
+        try {
+            const response = await fetch("/api/assets", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    category: "New Asset",
+                    description: "Description",
+                    amount: 0,
+                }),
+            });
+            if (response.ok) {
+                const newAsset = await response.json();
+                setAssets([...assets, newAsset]);
+            } else {
+                console.error("Failed to add new asset");
+            }
+        } catch (error) {
+            console.error("Error adding new asset:", error);
+        }
+    };
+
     return (
         <div className="text-center mt-5">
-            <Header back={<i class="fa-solid fa-chevron-left"></i>} page={"Assets"} />
+            <Header back={<i className="fa-solid fa-chevron-left"></i>} page={"Assets"} />
             <CategoryLabels category={"Category"} description={"Description"} amount={"Amount"} lastUpdated={"Last Updated"} />
-            <InformationPanel category={"Savings Account"} description={"Citi Bank Savings Account"} amount={"1,000,000.00"} lastUpdated={"1/13/2024"} />
-            <InformationPanel category={"Patent"} description={"Royalties"} amount={"50,000.00"} lastUpdated={"1/13/2024"} />
-            <InformationPanel category={"Coding Company"} description={"Quarterly Profits"} amount={"5,330,000.00"} lastUpdated={"1/13/2024"} />
+            {assets.map((asset) => (
+                <InformationPanel
+                    key={asset.id}
+                    category={asset.category}
+                    description={asset.description}
+                    amount={parseFloat(asset.amount).toFixed(2)}
+                    lastUpdated={new Date(asset.last_updated).toLocaleDateString()}
+                />
+            ))}
         </div>
     );
-};
+}
