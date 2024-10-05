@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import db, User, Asset, Liability, UserPreferences
 from api.utils import generate_sitemap, APIException
 from api.send_email import send_email
 from flask_cors import CORS
@@ -13,7 +13,16 @@ import os
 from datetime import datetime, timedelta
 import jwt
 
+# TODO:
+# Test new routes, fix bugs
+# Make sure its getting sent correctly from the front end to the actions to the flux.js actions.signup to the backend routes
 
+#  TODO:
+    # Add to sign-up
+    # username = request.json.get("username")
+    # phone = request.json.get("phone")
+    # text_notification = request.json.get("text_notification", False)
+    # text_frequency = request.json.get("text_frequency", "none")
 
 
 
@@ -22,11 +31,16 @@ api = Blueprint('api', __name__)
 # Allow CORS requests to this API
 CORS(api)
 
-
+# Need to add preferences table later
 @api.route('/signup', methods=['POST'])
 def sign_up():
     email = request.json.get("email")
     password = request.json.get("password")
+    username = request.json.get("username")
+    phone = request.json.get("phone")
+    text_notification = request.json.get("text_notification", False)
+    text_frequency = request.json.get("text_frequency", "none")
+
 
     user = User.query.filter_by(email = email).one_or_none()
     if user:
@@ -34,12 +48,21 @@ def sign_up():
 
     new_user = User(
        email = email,
-       password = generate_password_hash(password) 
+       password = generate_password_hash(password),
+       username = username,
+       phone = phone
     )
     db.session.add(new_user)
     db.session.commit()
-    
 
+    new_preferences = UserPreferences(
+        user_id = new_user.id,
+        text_notification = text_notification,
+        text_frequency = text_notification and text_frequency or "none",
+    )
+    db.session.add(new_preferences)
+    db.session.commit()
+    
     response_body = {
         "message": "User successfully created",
         "user": new_user.serialize() 
@@ -110,10 +133,10 @@ def reset_password(token):
 
     # Asset routes
 # C
-
+@api.route("/create-asset", methods=["POST"])
 def create_asset():
     current_user = get_jwt_identity() 
-    user = User.query.filter_by(email=current_user).first()
+    user = User.query.filter_by(username=current_user).first()
 
     category = request.json.get("category")
     amount = request.json.get("amount")
@@ -136,10 +159,10 @@ def create_asset():
 
 
 # R
-
+@api.route("/get-asset", methods=["GET"])
 def get_assets():
     current_user = get_jwt_identity()
-    user = User.query.filter_by(email=current_user).first()
+    user = User.query.filter_by(username=current_user).first()
 
     if not user:
         return jsonify({"message": "User not found"}), 404
@@ -148,12 +171,12 @@ def get_assets():
     return jsonify({asset.serialize() for asset in assets}), 200
 
 # U
-
+@api.route("/update-asset/<int:asset_id>", methods=["PUT"])
 def update_asset(asset_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(email=current_user).first()
+    user = User.query.filter_by(username=current_user).first()
 
-    asset = asset.query.get(asset_id)
+    asset = Asset.query.get(asset_id)
     if not asset or asset.user_id != user.id:
         return jsonify({"message": "Asset not found or unauthorized"}), 404
     
@@ -166,12 +189,12 @@ def update_asset(asset_id):
     return jsonify(asset.serialize()), 200
 
 # D
-
+@api.route("/delete-asset/<int:asset_id>", methods=["DELETE"])
 def delete_asset(asset_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(email=current_user).first()
+    user = User.query.filter_by(username=current_user).first()
 
-    asset = asset.query.get(asset_id)
+    asset = Asset.query.get(asset_id)
     if not asset or asset.user_id != user.id:
         return jsonify({"message": "Asset not found or unauthorized"}), 404
     
@@ -181,10 +204,10 @@ def delete_asset(asset_id):
 
     # Liability routes
 # C
-
+@api.route("/create-liability", methods=["POST"])
 def create_liability():
     current_user = get_jwt_identity()
-    user = User.query.filter_by(email=current_user).first()
+    user = User.query.filter_by(username=current_user).first()
 
     category = request.json.get("category")
     amount = request.json.get("amount")
@@ -206,10 +229,10 @@ def create_liability():
     return jsonify(new_liability.serialize()), 201
 
 # R
-
+@api.route("/liabilities", methods=["GET"])
 def get_liabilities():
     current_user = get_jwt_identity()
-    user = User.query.filter_by(email=current_user).first()
+    user = User.query.filter_by(username=current_user).first()
 
     if not user:
         return jsonify({"message": "User not found"}), 404
@@ -218,10 +241,10 @@ def get_liabilities():
     return jsonify([liability.serialize() for liability in liabilities]), 200
 
 # U
-
+@api.route("/update-liability/<int:liability_id>", methods=["PUT"])
 def update_liability(liability_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(email=current_user).first()
+    user = User.query.filter_by(username=current_user).first()
 
     liability = Liability.query.get(liability_id)
     if not liability or liability.user_id != user.id:
@@ -236,10 +259,10 @@ def update_liability(liability_id):
     return jsonify(liability.serialize()), 200
 
 # D
-
+@api.route("/delete-liability/<int:liability_id>", methods=["DELETE"])
 def delete_liability(liability_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(email=current_user).first()
+    user = User.query.filter_by(username=current_user).first()
 
     liability = Liability.query.get(liability_id)
     if not liability or liability.user_id != user.id:
