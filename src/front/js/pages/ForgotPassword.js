@@ -38,7 +38,7 @@ export const ForgotPassword = () => {
                 }
             } catch (error) {
                 setErrMsg(error.message)
-            }// This is where I began coding at work
+            }
         } else {
             if (password !== confirmPassword) {
                 setErrMsg("passwords do not match");
