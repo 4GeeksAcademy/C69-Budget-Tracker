@@ -1,8 +1,6 @@
-import React, { useContext } from "react";
-import { Context } from "../store/appContext";
+import React from "react";
 
 export default function InformationPanel(props) {
-    const { store, actions } = useContext(Context);
 
 // COPY AND PASTE CODE BENEATH WHERE NEEDED   
 //------>      <InformationPanel category={"n/a"} description={"n/a"} amount={"0.00"} lastUpdated={"n/a"} />
@@ -10,6 +8,7 @@ export default function InformationPanel(props) {
 
 // Drop down menu needed for line 19 equipped with "edit" and "delete" funciton
     return (
+
         <div className="card w-75 mx-auto m-2 rounded-4 shadow-sm border-light-subtle">
             <div className="card-body d-flex justify-content-between px-3 pb-1" style={{ position: 'relative', top: '7px' }}>
                 <div className="col-2">{props.category}</div>

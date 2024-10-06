@@ -4,7 +4,6 @@ import BudgetPanel from '../component/budgetPanel';
 import Header from "../component/header";
 
 export default function NetWorth() {
-    const { store, actions } = useContext(Context);
     const [welcome, setWelcome] = useState("");
     const [showAddAssetForm, setShowAddAssetForm] = useState(false);
     const [currentTime, setCurrentTime] = useState("");
@@ -98,10 +97,10 @@ export default function NetWorth() {
     };
 
     return (
+
         <div className="text-center">
-            <Header welcome={welcome} name={"Mr. Kean!"} onAddAsset={handleAddAsset} />
-            {showAddAssetForm && (<div className="mb-4">Add Asset Form Placeholder</div>)}
-            <div style={{ marginTop: '-25px' }}>
+            <Header welcome={welcome} name={"Mr. Kean!"} showBackButton={false} showAddButton={true} />
+            <div className="mt-3" style={{ marginTop: '-25px' }}>
                 <BudgetPanel title={"Net Worth"} total={formatCurrency(netWorth)} lastUpdated={formatDate(netWorthLastUpdated)} />
                 <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(liabilitiesData.total)} lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
                 <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(assetsData.total)} lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />

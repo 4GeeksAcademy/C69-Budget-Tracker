@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Context } from "../store/appContext";
+import React, { useEffect, useState } from "react";
 import InformationPanel from "../component/informationPanel";
 import Header from "../component/header";
 import CategoryLabels from "../component/categoryLabels";
 
 export default function Assets() {
-    const { store, actions } = useContext(Context);
     const [assets, setAssets] = useState([]);
 
     useEffect(() => {
@@ -51,18 +49,11 @@ export default function Assets() {
     };
 
     return (
-        <div className="text-center mt-5">
-            <Header back={<i className="fa-solid fa-chevron-left"></i>} page={"Assets"} />
+        <div className="text-center">
+            <Header back={<i className="fa-solid fa-chevron-left"></i>} page={"Assets"} showBackButton={true} showAddButton={true} />
             <CategoryLabels category={"Category"} description={"Description"} amount={"Amount"} lastUpdated={"Last Updated"} />
             {assets.map((asset) => (
-                <InformationPanel
-                    key={asset.id}
-                    category={asset.category}
-                    description={asset.description}
-                    amount={parseFloat(asset.amount).toFixed(2)}
-                    lastUpdated={new Date(asset.last_updated).toLocaleDateString()}
-                />
-            ))}
+                <InformationPanel key={asset.id} category={asset.category} description={asset.description} amount={parseFloat(asset.amount).toFixed(2)} lastUpdated={new Date(asset.last_updated).toLocaleDateString()} /> ))}
         </div>
     );
 }

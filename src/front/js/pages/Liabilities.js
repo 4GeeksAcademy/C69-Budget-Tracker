@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Context } from "../store/appContext";
+import React, { useEffect, useState } from "react";
 import InformationPanel from "../component/informationPanel";
 import Header from "../component/header";
 import CategoryLabels from "../component/categoryLabels";
 
 export default function Liabilities() {
-    const { store, actions } = useContext(Context);
     const [liabilities, setLiabilities] = useState([]);
 
     useEffect(() => {
@@ -51,18 +49,12 @@ export default function Liabilities() {
     };
 
     return (
+        
         <div className="text-center">
-            <Header back={<i className="fa-solid fa-chevron-left"></i>} page={"Liabilities"} />
+            <Header back={<i className="fa-solid fa-chevron-left"></i>} page={"Liabilities"} showBackButton={true} showAddButton={true} />
             <CategoryLabels category={"Category"} description={"Description"} amount={"Amount"} lastUpdated={"Last Updated"} />
             {liabilities.map((liability) => (
-                <InformationPanel
-                    key={liability.id}
-                    category={liability.category}
-                    description={liability.description}
-                    amount={parseFloat(liability.amount).toFixed(2)}
-                    lastUpdated={new Date(liability.last_updated).toLocaleDateString()}
-                />
-            ))}
+                <InformationPanel key={liability.id} category={liability.category} description={liability.description} amount={parseFloat(liability.amount).toFixed(2)} lastUpdated={new Date(liability.last_updated).toLocaleDateString()} /> ))}
         </div>
     );
 }
