@@ -59,7 +59,7 @@ export const NavbarComponent = () => {
   };
 
   return (
-    <Navbar bg="white" expand="lg" className="border-bottom">
+    <Navbar bg="white" expand="lg" className="border-bottom shadow">
       <Container>
         <Navbar.Brand as={Link} to="/">
           <img
@@ -77,6 +77,7 @@ export const NavbarComponent = () => {
             <Nav.Link as={Link} to="/savings-goal" className="text-dark me-4">Savings Goal</Nav.Link>
             <Nav.Link as={Link} to="/budget-tracker" className="text-dark">Budget Tracker</Nav.Link>
           </Nav>
+
           <div className="position-relative" ref={dropdownRef}>
             <button 
               className="d-flex align-items-center justify-content-between border rounded-pill px-3 py-2"
@@ -120,6 +121,19 @@ export const NavbarComponent = () => {
                   </Link>
                 )}
               </div>
+
+//           <div className="d-flex align-items-center">
+//             <div className="d-flex align-items-center justify-content-between border rounded-pill px-3 py-2 me-3 shadow-sm" style={{width: '85px'}}>
+//               <List size={20} className="text-dark" />
+//               <PersonCircle size={25} className="text-dark" />
+//             </div>
+//             {isLoggedIn ? (
+//               <button onClick={handleLogout} className="btn btn-primary">Logout</button>
+//             ) : (
+//               <Link to="/login">
+//                 <button className="btn btn-primary">Login</button>
+//               </Link>
+
             )}
           </div>
         </Navbar.Collapse>

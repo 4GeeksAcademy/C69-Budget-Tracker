@@ -58,7 +58,7 @@ class Asset(db.Model):
     user_id = db.Column(db.Integer, ForeignKey("users.id"), nullable = False)
     category = db.Column(db.String(255), nullable=False)
     amount = db.Column(db.Numeric(20, 2), nullable=False)
-    description = db.Column(db.String(500), nullable=True)
+    description = db.Column(db.String(500), nullable=False)
     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="assets")
@@ -80,7 +80,7 @@ class Liability(db.Model):
     user_id = db.Column(db.Integer, ForeignKey("users.id"), nullable = False)
     category = db.Column(db.String(255), nullable=False)
     amount = db.Column(db.Numeric(20, 2), nullable=False)
-    description = db.Column(db.String(500), nullable=True)
+    description = db.Column(db.String(500), nullable=False)
     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="liabilities")

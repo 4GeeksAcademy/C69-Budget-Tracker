@@ -12,6 +12,8 @@ import NetWorth from "./pages/NetWorth.js";
 import Liabilities from "./pages/Liabilities.js";
 import Assets from "./pages/Assets.js";
 import injectContext from "./store/appContext";
+import NewLiability from "./pages/NewLiability.js";
+import NewAsset from "./pages/NewAsset.js";
 
 import { NavbarComponent } from "./component/navbar";
 
@@ -33,16 +35,31 @@ const Layout = () => {
                 <ScrollToTop>
                     <NavbarComponent />
                     <Routes>
+
                         <Route element={<Home />} path="/" />
                         <Route element={<Home />} path="/Home" />
                         <Route element={<NetWorth />} path="/networth" />
+
+//                         <Route element={<h1>Not found!</h1>} path="*" />
+
                         <Route element={<Login />} path="/login" />
+                        <Route element={<Signup />} path="/signup" />
+                        <Route element={<ForgotPassword />} path="/forgot-password" />
                         <Route element={<Dashboard />} path="/dashboard" />
+
                         <Route element={<Liabilities />} path="/liabilities" />
                         <Route element={<Assets />} path="/assets" />
                         <Route element={<Signup />} path="/signup" />
                         <Route element={<ForgotPassword />} path="/forgot-password" />
                         <Route element={<h1>Not found!</h1>} path="*" />
+
+//                         <Route element={<NetWorth />} path="/" />
+//                         <Route element={<Liabilities />} path="/liabilities" />
+//                         <Route element={<Assets />} path="/assets" />                   
+//                         <Route element={<NewLiability />} path="/newliability" />
+//                         <Route element={<NewAsset />} path="/newasset" />
+                        {/* <Route element={<NetWorth />} path="/networth" /> */}
+
                     </Routes>
                 </ScrollToTop>
             </BrowserRouter>
