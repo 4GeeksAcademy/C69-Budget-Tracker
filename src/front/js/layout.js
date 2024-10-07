@@ -5,8 +5,12 @@ import { BackendURL } from "./component/backendURL";
 import { ForgotPassword } from "./pages/ForgotPassword.js";
 import Home from "./component/Home.js";
 
-import Login from "./pages/Login.js"
-import Signup from "./pages/Signup.js"
+import Login from "./pages/Login.js";
+import Signup from "./pages/Signup.js";
+import Dashboard from "./pages/dashboard.js";
+import NetWorth from "./pages/NetWorth.js";
+import Liabilities from "./pages/Liabilities.js";
+import Assets from "./pages/Assets.js";
 import injectContext from "./store/appContext";
 
 import { NavbarComponent } from "./component/navbar";
@@ -29,16 +33,17 @@ const Layout = () => {
                 <ScrollToTop>
                     <NavbarComponent />
                     <Routes>
-                    <Route element={<Home />} path="/" />
+                        <Route element={<Home />} path="/" />
                         <Route element={<Home />} path="/Home" />
-                        
+                        <Route element={<NetWorth />} path="/networth" />
                         <Route element={<Login />} path="/login" />
-
+                        <Route element={<Dashboard />} path="/dashboard" />
+                        <Route element={<Liabilities />} path="/liabilities" />
+                        <Route element={<Assets />} path="/assets" />
                         <Route element={<Signup />} path="/signup" />
                         <Route element={<ForgotPassword />} path="/forgot-password" />
                         <Route element={<h1>Not found!</h1>} path="*" />
                     </Routes>
-
                 </ScrollToTop>
             </BrowserRouter>
         </div>

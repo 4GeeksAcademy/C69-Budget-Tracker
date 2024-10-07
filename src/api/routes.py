@@ -1,7 +1,8 @@
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import db, User, Asset, Liability, UserPreferences
 from api.utils import generate_sitemap, APIException
 from api.send_email import send_email
 from flask_cors import CORS
@@ -11,15 +12,31 @@ import os
 from datetime import datetime, timedelta
 import jwt
 
+# TODO:
+# Test new routes, fix bugs
+# Make sure its getting sent correctly from the front end to the actions to the flux.js actions.signup to the backend routes
+
+#  TODO:
+    # Add to sign-up
+    # username = request.json.get("username")
+    # phone = request.json.get("phone")
+    # text_notification = request.json.get("text_notification", False)
+    # text_frequency = request.json.get("text_frequency", "none")
+
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
 
+# Need to add preferences table later
 @api.route('/signup', methods=['POST'])
 def sign_up():
     email = request.json.get("email")
     password = request.json.get("password")
+    username = request.json.get("username")
+    phone = request.json.get("phone")
+    text_notification = request.json.get("text_notification", False)
+    text_frequency = request.json.get("text_frequency", "none")
 
     user = User.query.filter_by(email = email).one_or_none()
     if user:
@@ -27,9 +44,19 @@ def sign_up():
 
     new_user = User(
        email = email,
-       password = generate_password_hash(password) 
+       password = generate_password_hash(password),
+       username = username,
+       phone = phone
     )
     db.session.add(new_user)
+    db.session.commit()
+
+    new_preferences = UserPreferences(
+        user_id = new_user.id,
+        text_notification = text_notification,
+        text_frequency = text_notification and text_frequency or "none",
+    )
+    db.session.add(new_preferences)
     db.session.commit()
     
     response_body = {
@@ -94,3 +121,151 @@ def reset_password(token):
 
     send_email(email, "password successfully reset", "password reset confirmation for Koyo")
     return jsonify({"message": "password reset email sent"}), 200
+
+# Asset routes
+# C
+@api.route("/create-asset", methods=["POST"])
+@jwt_required()
+def create_asset():
+    current_user = get_jwt_identity() 
+    user = User.query.filter_by(email=current_user).first()
+
+    category = request.json.get("category")
+    amount = request.json.get("amount")
+    description = request.json.get("description")
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    new_asset = Asset(
+        user_id=user.id,
+        category=category,
+        amount=amount,
+        description=description
+    )
+
+    db.session.add(new_asset)
+    db.session.commit()
+
+    return jsonify(new_asset.serialize()), 201
+
+# R
+@api.route("/get-asset", methods=["GET"])
+@jwt_required()
+def get_assets():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    assets = Asset.query.filter_by(user_id=user.id).all()
+    return jsonify([asset.serialize() for asset in assets]), 200
+
+# U
+@api.route("/update-asset/<int:asset_id>", methods=["PUT"])
+@jwt_required()
+def update_asset(asset_id):
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    asset = Asset.query.get(asset_id)
+    if not asset or asset.user_id != user.id:
+        return jsonify({"message": "Asset not found or unauthorized"}), 404
+    
+    asset.category = request.json.get("category", asset.category)
+    asset.amount = request.json.get("amount", asset.amount)
+    asset.description = request.json.get("description", asset.description)
+    asset.last_updated = datetime.utcnow()
+
+    db.session.commit()
+    return jsonify(asset.serialize()), 200
+
+# D
+@api.route("/delete-asset/<int:asset_id>", methods=["DELETE"])
+@jwt_required()
+def delete_asset(asset_id):
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    asset = Asset.query.get(asset_id)
+    if not asset or asset.user_id != user.id:
+        return jsonify({"message": "Asset not found or unauthorized"}), 404
+    
+    db.session.delete(asset)
+    db.session.commit()
+    return jsonify({"message": "Asset deleted"}), 200
+
+# Liability routes
+# C
+@api.route("/create-liability", methods=["POST"])
+@jwt_required()
+def create_liability():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    category = request.json.get("category")
+    amount = request.json.get("amount")
+    description = request.json.get("description")
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    new_liability = Liability(
+        user_id=user.id,
+        category=category,
+        amount=amount,
+        description=description
+    )
+
+    db.session.add(new_liability)
+    db.session.commit()
+
+    return jsonify(new_liability.serialize()), 201
+
+# R
+@api.route("/liabilities", methods=["GET"])
+@jwt_required()
+def get_liabilities():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    liabilities = Liability.query.filter_by(user_id=user.id).all()
+    return jsonify([liability.serialize() for liability in liabilities]), 200
+
+# U
+@api.route("/update-liability/<int:liability_id>", methods=["PUT"])
+@jwt_required()
+def update_liability(liability_id):
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    liability = Liability.query.get(liability_id)
+    if not liability or liability.user_id != user.id:
+        return jsonify({"message": "Liability not found or unauthorized"}), 404
+    
+    liability.category = request.json.get("category", liability.category)
+    liability.amount = request.json.get("amount", liability.amount)
+    liability.description = request.json.get("description", liability.description)
+    liability.last_updated = datetime.utcnow()
+
+    db.session.commit()
+    return jsonify(liability.serialize()), 200
+
+# D
+@api.route("/delete-liability/<int:liability_id>", methods=["DELETE"])
+@jwt_required()
+def delete_liability(liability_id):
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    liability = Liability.query.get(liability_id)
+    if not liability or liability.user_id != user.id:
+        return jsonify({"message": "Liability not found or unauthorized"}), 404
+    
+    db.session.delete(liability)
+    db.session.commit()
+    return jsonify({"message": "Liability deleted"}), 200

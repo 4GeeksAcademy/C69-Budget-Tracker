@@ -73,7 +73,7 @@ export const NavbarComponent = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto">
-            <Nav.Link as={Link} to="/net-worth" className="fw-bold me-4" style={{ color: '#222222' }}>Net Worth</Nav.Link>
+            <Nav.Link as={Link} to="/" className="fw-bold me-4" style={{ color: '#222222' }}>Net Worth</Nav.Link>
             <Nav.Link as={Link} to="/savings-goal" className="text-dark me-4">Savings Goal</Nav.Link>
             <Nav.Link as={Link} to="/budget-tracker" className="text-dark">Budget Tracker</Nav.Link>
           </Nav>
