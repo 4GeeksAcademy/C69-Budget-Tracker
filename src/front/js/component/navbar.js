@@ -18,7 +18,7 @@ export const NavbarComponent = () => {
   const isLoggedIn = !!sessionStorage.getItem("token");
 
   return (
-    <Navbar bg="white" expand="lg" className="border-bottom">
+    <Navbar bg="white" expand="lg" className="border-bottom shadow">
       <Container>
         <Navbar.Brand as={Link} to="/">
           {/* If you have the logo, uncomment the following block and comment out the text "Koyo" */}
@@ -39,9 +39,9 @@ export const NavbarComponent = () => {
             <Nav.Link as={Link} to="/budget-tracker" className="text-dark">Budget Tracker</Nav.Link>
           </Nav>
           <div className="d-flex align-items-center">
-            <div className="d-flex align-items-center justify-content-between border rounded-pill px-3 py-2 me-3" style={{width: '85px'}}>
+            <div className="d-flex align-items-center justify-content-between border rounded-pill px-3 py-2 me-3 shadow-sm" style={{width: '85px'}}>
               <List size={20} className="text-dark" />
-              <PersonCircle size={20} className="text-dark" />
+              <PersonCircle size={25} className="text-dark" />
             </div>
             {isLoggedIn ? (
               <button onClick={handleLogout} className="btn btn-primary">Logout</button>
