@@ -1,7 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Asset, Liability, UserPreferences
 from api.utils import generate_sitemap, APIException
@@ -24,8 +23,6 @@ import jwt
     # text_notification = request.json.get("text_notification", False)
     # text_frequency = request.json.get("text_frequency", "none")
 
-
-
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
@@ -40,7 +37,6 @@ def sign_up():
     phone = request.json.get("phone")
     text_notification = request.json.get("text_notification", False)
     text_frequency = request.json.get("text_frequency", "none")
-
 
     user = User.query.filter_by(email = email).one_or_none()
     if user:
@@ -88,7 +84,6 @@ def login():
     )
     return jsonify({"token": access_token}), 200
 
-
 @api.route("/forgot-password", methods=["POST"])
 def forgot_password(): 
     email=request.json.get("email")
@@ -103,8 +98,6 @@ def forgot_password():
     email_value=f"Click here to reset password.\n{os.getenv('FRONTEND_URL')}/forgot-password?token={token}"
     send_email(email, email_value, "password recover: Koyo")
     return jsonify({"message": "recovery email sent"}), 200
-    
-
 
 @api.route("/reset-password/<token>", methods=["PUT"])
 def reset_password(token):
@@ -129,14 +122,13 @@ def reset_password(token):
     send_email(email, "password successfully reset", "password reset confirmation for Koyo")
     return jsonify({"message": "password reset email sent"}), 200
 
-
-
-    # Asset routes
+# Asset routes
 # C
 @api.route("/create-asset", methods=["POST"])
+@jwt_required()
 def create_asset():
     current_user = get_jwt_identity() 
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(email=current_user).first()
 
     category = request.json.get("category")
     amount = request.json.get("amount")
@@ -157,24 +149,25 @@ def create_asset():
 
     return jsonify(new_asset.serialize()), 201
 
-
 # R
 @api.route("/get-asset", methods=["GET"])
+@jwt_required()
 def get_assets():
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(email=current_user).first()
 
     if not user:
         return jsonify({"message": "User not found"}), 404
     
     assets = Asset.query.filter_by(user_id=user.id).all()
-    return jsonify({asset.serialize() for asset in assets}), 200
+    return jsonify([asset.serialize() for asset in assets]), 200
 
 # U
 @api.route("/update-asset/<int:asset_id>", methods=["PUT"])
+@jwt_required()
 def update_asset(asset_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(email=current_user).first()
 
     asset = Asset.query.get(asset_id)
     if not asset or asset.user_id != user.id:
@@ -190,9 +183,10 @@ def update_asset(asset_id):
 
 # D
 @api.route("/delete-asset/<int:asset_id>", methods=["DELETE"])
+@jwt_required()
 def delete_asset(asset_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(email=current_user).first()
 
     asset = Asset.query.get(asset_id)
     if not asset or asset.user_id != user.id:
@@ -202,12 +196,13 @@ def delete_asset(asset_id):
     db.session.commit()
     return jsonify({"message": "Asset deleted"}), 200
 
-    # Liability routes
+# Liability routes
 # C
 @api.route("/create-liability", methods=["POST"])
+@jwt_required()
 def create_liability():
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(email=current_user).first()
 
     category = request.json.get("category")
     amount = request.json.get("amount")
@@ -230,9 +225,10 @@ def create_liability():
 
 # R
 @api.route("/liabilities", methods=["GET"])
+@jwt_required()
 def get_liabilities():
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(email=current_user).first()
 
     if not user:
         return jsonify({"message": "User not found"}), 404
@@ -242,9 +238,10 @@ def get_liabilities():
 
 # U
 @api.route("/update-liability/<int:liability_id>", methods=["PUT"])
+@jwt_required()
 def update_liability(liability_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(email=current_user).first()
 
     liability = Liability.query.get(liability_id)
     if not liability or liability.user_id != user.id:
@@ -260,9 +257,10 @@ def update_liability(liability_id):
 
 # D
 @api.route("/delete-liability/<int:liability_id>", methods=["DELETE"])
+@jwt_required()
 def delete_liability(liability_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(email=current_user).first()
 
     liability = Liability.query.get(liability_id)
     if not liability or liability.user_id != user.id:
@@ -271,4 +269,3 @@ def delete_liability(liability_id):
     db.session.delete(liability)
     db.session.commit()
     return jsonify({"message": "Liability deleted"}), 200
-

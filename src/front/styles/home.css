@@ -4,4 +4,226 @@
     All pages share the styles on index.css but you should create 
     one more css for each page that will contain the selected used 
     on that page only (the ones not reused in other pages).
-*/
+*/body {
+    background-color: #f8f9fa;
+}
+
+.navbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,.08);
+}
+
+.nav-link {
+  color: #6c757d;
+}
+
+.nav-link.active {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+.btn-light {
+  background-color: #f1f3f5;
+  border: none;
+}
+
+.btn-light:hover {
+  background-color: #e9ecef;
+}
+
+.container {
+  padding-left: 3rem !important;
+  padding-right: 3rem !important;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.greeting {
+  margin-bottom: 0;
+}
+
+.add-button {
+  padding: 0.25rem 0.5rem;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: 4rem !important;
+    padding-right: 4rem !important;
+  }
+}
+
+/* Styles for the dropdown */
+.add-options-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  z-index: 1000;
+  min-width: 150px;
+}
+
+.add-options-dropdown .dropdown-item {
+  padding: 10px 15px;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-options-dropdown .dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.add-options-dropdown .dropdown-item:first-child {
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* Styles for AddAssetForm */
+.add-asset-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e8f5e9;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 60px;
+}
+
+.add-asset-form {
+  background-color: #e8f5e9;
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form-header h2 {
+  color: #2e7d32;
+  margin: 0;
+  font-size: 24px;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #2e7d32;
+  cursor: pointer;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #1b5e20;
+  font-weight: bold;
+}
+
+.form-group select,
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #81c784;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 16px;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.submit-button,
+.cancel-button {
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.submit-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+}
+
+.submit-button:hover {
+  background-color: #45a049;
+}
+
+.cancel-button {
+  background-color: transparent;
+  color: #4caf50;
+  border: 1px solid #4caf50;
+}
+
+.cancel-button:hover {
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+/* Improved styles for login/logout modal dropdown */
+.login-logout-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  overflow: hidden;
+  z-index: 1000;
+  min-width: 180px;
+  padding: 8px 0;
+}
+
+.login-logout-dropdown .dropdown-item {
+  display: block;
+  padding: 12px 20px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+  font-size: 14px;
+}
+
+.login-logout-dropdown .dropdown-item:hover {
+  background-color: #f0f0f0;
+  color: #007bff;
+}
+
+.login-logout-dropdown .dropdown-item:active {
+  background-color: #007bff;
+  color: white;
+}
