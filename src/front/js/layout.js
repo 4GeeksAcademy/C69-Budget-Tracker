@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 import { ForgotPassword } from "./pages/ForgotPassword.js";
-import { Home } from "./pages/home";
+import Home from "./component/Home.js";
 
 import Login from "./pages/Login.js";
 import Signup from "./pages/Signup.js";
@@ -16,7 +16,7 @@ import NewLiability from "./pages/NewLiability.js";
 import NewAsset from "./pages/NewAsset.js";
 
 import { NavbarComponent } from "./component/navbar";
-import { Footer } from "./component/footer";
+
 
 // Import Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -35,6 +35,7 @@ const Layout = () => {
                 <ScrollToTop>
                     <NavbarComponent />
                     <Routes>
+<<<<<<< HEAD
                         <Route element={<h1>Not found!</h1>} path="*" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<Signup />} path="/signup" />
@@ -46,8 +47,34 @@ const Layout = () => {
                         <Route element={<NewLiability />} path="/newliability" />
                         <Route element={<NewAsset />} path="/newasset" />
                         {/* <Route element={<NetWorth />} path="/networth" /> */}
-                    </Routes>
+=======
 
+                        <Route element={<Home />} path="/" />
+                        <Route element={<Home />} path="/Home" />
+                        <Route element={<NetWorth />} path="/networth" />
+
+//                         <Route element={<h1>Not found!</h1>} path="*" />
+
+                        <Route element={<Login />} path="/login" />
+                        <Route element={<Signup />} path="/signup" />
+                        <Route element={<ForgotPassword />} path="/forgot-password" />
+                        <Route element={<Dashboard />} path="/dashboard" />
+
+                        <Route element={<Liabilities />} path="/liabilities" />
+                        <Route element={<Assets />} path="/assets" />
+                        <Route element={<Signup />} path="/signup" />
+                        <Route element={<ForgotPassword />} path="/forgot-password" />
+                        <Route element={<h1>Not found!</h1>} path="*" />
+
+//                         <Route element={<NetWorth />} path="/" />
+//                         <Route element={<Liabilities />} path="/liabilities" />
+//                         <Route element={<Assets />} path="/assets" />                   
+//                         <Route element={<NewLiability />} path="/newliability" />
+//                         <Route element={<NewAsset />} path="/newasset" />
+                        {/* <Route element={<NetWorth />} path="/networth" /> */}
+
+>>>>>>> origin/main
+                    </Routes>
                 </ScrollToTop>
             </BrowserRouter>
         </div>
