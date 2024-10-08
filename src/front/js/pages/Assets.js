@@ -7,14 +7,20 @@ export default function Assets() {
     const [assets, setAssets] = useState([]);
 
     useEffect(() => {
+        console.log("fetch called")
         fetchAssets();
     }, []);
 
     const fetchAssets = async () => {
         try {
-            const response = await fetch("/api/assets");
+            const response = await fetch(`${process.env.BACKEND_URL}api/get-asset`, {
+                headers: {
+                    Authorization: "Bearer " + sessionStorage.getItem("token")
+                },
+            });
             if (response.ok) {
                 const data = await response.json();
+                console.log(data, "data")
                 setAssets(data);
             } else {
                 console.error("Failed to fetch assets");
