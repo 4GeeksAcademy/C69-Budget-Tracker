@@ -48,13 +48,13 @@ export default function Header({ welcome, name, back, page, showBackButton = fal
           <div className="d-flex flex-column">
 
             {/* GREETING */}
-            <h4 className="font-normal fw-semibold text-muted" style={{ position: 'relative', right: '-40px' }}>{welcome} {name}</h4>
+            <h4 className="font-normal fw-semibold text-muted" style={{ position: 'relative', right: '35px' }}>{welcome} {name}</h4>
 
             <div className="d-flex align-items-center">
               
               {/* BACK BUTTON */}
               {showBackButton && (
-                <span className="back-button" style={{ position: 'relative', top: '-15px', right: '10px' }}>
+                <span className="back-button" style={{ position: 'relative', top: '-15px', right: '80px' }}>
                   <button
                     className="btn rounded-circle fw-semibold text-muted shadow-none"
                     onClick={() => navigate(-1)}
@@ -65,7 +65,7 @@ export default function Header({ welcome, name, back, page, showBackButton = fal
               )}
 
               {/* PAGE TITLE */}
-              <span className="page-title" style={{ position: 'relative', top: '-15px', right: '-3px' }}>
+              <span className="page-title" style={{ position: 'relative', top: '-15px', right: '75px' }}>
                 <h4 className="font-normal fw-semibold text-muted">{page}</h4>
               </span>
 
@@ -90,7 +90,7 @@ export default function Header({ welcome, name, back, page, showBackButton = fal
                   padding: 0,
                   position: "absolute",
                   top: -15,
-                  right: 0,
+                  right: -75,
                   zIndex: 2
                 }}><i className="fa-solid fa-plus shadow"></i>
               </button>
