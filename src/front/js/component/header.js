@@ -99,8 +99,8 @@ export default function Header({ welcome, name, back, page, showBackButton = fal
               {showAddOptions && (
                 <div className="list-group mt-2 border border-light-subtle bg-white rounded-3 shadow fw-semibold text-muted" style={{
                   position: 'absolute',
-                  top: '20px',
-                  right: '0',
+                  top: '10px',
+                  right: '-60px',
                   width: '175px',
                   zIndex: 1000
                 }}>

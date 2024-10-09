@@ -1,14 +1,62 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-
+			assets: [],
+			total_assets: 0,
+			liabilities: [],
+			total_liabilities: 0,
 		},
 		actions: {
 
-
-
 			// forgot password action
 
+
+			fetchAssets: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/get-asset`, {
+						headers: {
+							Authorization: "Bearer " + sessionStorage.getItem("token")
+						},
+					});
+					if (response.ok) {
+						const data = await response.json();
+						console.log(data, "data")
+						setStore({
+							assets: data.asset_list,
+							total_assets: data.total,
+						});
+					} else {
+						console.error("Failed to fetch assets");
+					}
+				} catch (error) {
+					console.error("Error fetching assets:", error);
+				}
+			},
+
+
+
+			fetchLiabilities: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/get-liabilities`, {
+						headers: {
+							Authorization: "Bearer " + sessionStorage.getItem("token")
+						},
+					});
+					if (response.ok) {
+						const data = await response.json();
+						console.log(data, "data")
+						setStore({
+							liabilities: data.liability_list,
+							total_liabilities: data.total,
+						});
+					} else {
+						console.error("Failed to fetch liabilities");
+					}
+				} catch (error) {
+					console.error("Error fetching liabilities:", error);
+				}
+			},
+		
 
 
 			// reset password action
