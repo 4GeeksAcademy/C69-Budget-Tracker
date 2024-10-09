@@ -9,6 +9,18 @@ export default function NetWorth() {
     const [currentTime, setCurrentTime] = useState("");
     const [liabilitiesData, setLiabilitiesData] = useState({ total: 0, lastUpdated: null });
     const [assetsData, setAssetsData] = useState({ total: 0, lastUpdated: null });
+    const { actions, store } = useContext(Context);
+    
+
+    useEffect(() => {
+        console.log("fetch called")
+        actions.fetchAssets();
+    }, []);
+
+    useEffect(() => {
+        console.log("fetch called")
+        actions.fetchLiabilities();
+    }, []);
 
     useEffect(() => {
         const updateGreeting = () => {
@@ -96,14 +108,16 @@ export default function NetWorth() {
         return date ? date.toLocaleDateString() : 'N/A';
     };
 
+    
+
     return (
 
         <div className="text-center">
             <Header welcome={welcome} name={"Mr. Kean!"} showBackButton={false} showAddButton={true} />
             <div className="mt-3" style={{ marginTop: '-25px' }}>
-                <BudgetPanel title={"Net Worth"} total={formatCurrency(netWorth)} lastUpdated={formatDate(netWorthLastUpdated)} />
-                <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(liabilitiesData.total)} lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
-                <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(assetsData.total)} lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />
+                <BudgetPanel title={"Net Worth"} total={formatCurrency(store.total_assets - store.total_liabilities)} lastUpdated={formatDate(netWorthLastUpdated)} />
+                <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(store.total_liabilities)} lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
+                <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(store.total_assets)} lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />
             </div>
         </div>
     );

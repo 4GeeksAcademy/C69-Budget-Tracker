@@ -158,9 +158,12 @@ def get_assets():
 
     if not user:
         return jsonify({"message": "User not found"}), 404
-    
     assets = Asset.query.filter_by(user_id=user.id).all()
-    return jsonify([asset.serialize() for asset in assets]), 200
+    # Get total asset
+    total_assets = 0
+    for asset in assets:
+        total_assets += asset.amount
+    return jsonify(asset_list=[asset.serialize() for asset in assets], total=total_assets), 200
 
 # U
 @api.route("/update-asset/<int:asset_id>", methods=["PUT"])
@@ -224,7 +227,7 @@ def create_liability():
     return jsonify(new_liability.serialize()), 201
 
 # R
-@api.route("/liabilities", methods=["GET"])
+@api.route("/get-liabilities", methods=["GET"])
 @jwt_required()
 def get_liabilities():
     current_user = get_jwt_identity()
@@ -232,9 +235,12 @@ def get_liabilities():
 
     if not user:
         return jsonify({"message": "User not found"}), 404
-    
     liabilities = Liability.query.filter_by(user_id=user.id).all()
-    return jsonify([liability.serialize() for liability in liabilities]), 200
+    # Get all liabilities
+    total_liabilities = 0
+    for liability in liabilities:
+        total_liabilities += liability.amount
+    return jsonify(liability_list=[liability.serialize() for liability in liabilities], total=total_liabilities), 200
 
 # U
 @api.route("/update-liability/<int:liability_id>", methods=["PUT"])

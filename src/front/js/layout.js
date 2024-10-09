@@ -36,29 +36,17 @@ const Layout = () => {
                     <NavbarComponent />
                     <Routes>
 
-                        <Route element={<Home />} path="/" />
                         <Route element={<Home />} path="/Home" />
-                        <Route element={<NetWorth />} path="/networth" />
-
-//                         <Route element={<h1>Not found!</h1>} path="*" />
-
+                        <Route element={<h1>Not found!</h1>} path="*" />
+                        <Route element={<Dashboard />} path="/dashboard" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<Signup />} path="/signup" />
                         <Route element={<ForgotPassword />} path="/forgot-password" />
-                        <Route element={<Dashboard />} path="/dashboard" />
-
+                        <Route element={<NetWorth />} path="/" />
                         <Route element={<Liabilities />} path="/liabilities" />
                         <Route element={<Assets />} path="/assets" />
-                        <Route element={<Signup />} path="/signup" />
-                        <Route element={<ForgotPassword />} path="/forgot-password" />
-                        <Route element={<h1>Not found!</h1>} path="*" />
-
-//                         <Route element={<NetWorth />} path="/" />
-//                         <Route element={<Liabilities />} path="/liabilities" />
-//                         <Route element={<Assets />} path="/assets" />                   
-//                         <Route element={<NewLiability />} path="/newliability" />
-//                         <Route element={<NewAsset />} path="/newasset" />
-                        {/* <Route element={<NetWorth />} path="/networth" /> */}
+                        <Route element={<NewLiability />} path="/newliability" />
+                        <Route element={<NewAsset />} path="/newasset" />
 
                     </Routes>
                 </ScrollToTop>
