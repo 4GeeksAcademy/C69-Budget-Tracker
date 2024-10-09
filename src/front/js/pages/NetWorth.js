@@ -4,6 +4,7 @@ import BudgetPanel from '../component/budgetPanel';
 import Header from "../component/header";
 
 export default function NetWorth() {
+    const { store, actions } = useContext(Context);
     const [welcome, setWelcome] = useState("");
     const [showAddAssetForm, setShowAddAssetForm] = useState(false);
     const [currentTime, setCurrentTime] = useState("");
