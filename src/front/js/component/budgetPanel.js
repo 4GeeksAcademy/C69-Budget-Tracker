@@ -14,7 +14,7 @@ export default function BudgetPanel(props) {
                 <p className="card-title d-flex text-body-tertiary fw-medium">{props.title}</p>
                 <h1
                     className={`d-flex ${getTotalClass()} pb-3`}>
-                    <CountUp end={totalValue} />
+                    <CountUp end={totalValue} duration={props.duration} />
                 </h1>
                 <div className="d-flex justify-content-between align-items-center">
                     <p className="fw-medium fw-light fst-italic" style={{ fontSize: '0.75rem' }}>

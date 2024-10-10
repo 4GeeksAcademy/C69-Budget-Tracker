@@ -12,6 +12,11 @@ export default function NetWorth() {
     const [assetsData, setAssetsData] = useState({ total: 0, lastUpdated: null });
     const { actions, store } = useContext(Context);
     
+    const calculateDuration = (amount) => {
+        const baseDuration = 2;
+        const additionalDuration = Math.log10(Math.abs(amount) + 10) / 2;
+        return baseDuration + additionalDuration;
+    };
 
     useEffect(() => {
         console.log("fetch called")
@@ -116,9 +121,9 @@ export default function NetWorth() {
         <div className="text-center">
             <Header welcome={welcome} name={"Mr. Kean!"} showBackButton={false} showAddButton={true} />
             <div className="mt-3" style={{ marginTop: '-25px' }}>
-                <BudgetPanel title={"Net Worth"} total={formatCurrency(store.total_assets - store.total_liabilities)} lastUpdated={formatDate(netWorthLastUpdated)} />
-                <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(store.total_liabilities)} lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
-                <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(store.total_assets)} lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />
+                <BudgetPanel title={"Net Worth"} total={formatCurrency(store.total_assets - store.total_liabilities)} duration={calculateDuration(netWorth)}  lastUpdated={formatDate(netWorthLastUpdated)} />
+                <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(store.total_assets)} duration={calculateDuration(store.total_assets)}  lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />
+                <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(store.total_liabilities)} duration={calculateDuration(store.total_liabilities)}  lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
             </div>
         </div>
     );
