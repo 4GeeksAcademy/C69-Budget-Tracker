@@ -6,6 +6,43 @@ const getState = ({ getStore, getActions, setStore }) => {
         },
         actions: {
 
+			editUserInfo: async (updatedUser) => {
+				try {
+					const response = await fetch(process.env.BACKEND_URL + "/api/edit-user-info", {
+						method: "PUT",
+						headers: {
+							Authorization: "Bearer " + sessionStorage.getItem("token"),
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							username: updatedUser.username,
+							phone: updatedUser.phone,
+							text_notification: updatedUser.text_notification,
+							text_frequency: updatedUser.text_frequency
+						})
+					});
+			
+					if (response.ok) {
+						const data = await response.json();
+						setStore({
+							currentUser: data.user,
+							currentUserPreferences: data.preferences
+						});
+						return true;
+					} else {
+						const data = await response.json();
+						alert(data.message);
+						return false;
+					}
+				} catch (error) {
+					console.error("Error updating user info:", error);
+					alert("Something went wrong, try again later.");
+					return false;
+				}
+			},
+			
+
+
 			changePassword: async (passwordDetails) => {
 				try {
 					const response = await fetch(process.env.BACKEND_URL + "/api/change-password", {
