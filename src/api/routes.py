@@ -291,6 +291,31 @@ def get_user_info():
 
     return jsonify(response_body), 200
 
+
+
+        # Change password
+@api.route("/change-password", methods=["PUT"])
+@jwt_required()
+def change_password():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    data = request.get_json()
+    current_password = data.get("current_password")
+    new_password = data.get("new_password")
+
+    if not check_password_hash(user.password, current_password):
+        return jsonify({"message": "Incorrect current password"}), 401
+
+    user.password = generate_password_hash(new_password)
+    db.session.commit()
+
+    return jsonify({"message": "Password changed successfully"}), 200
+
+
 @api.route("/edit-user-info", methods=["PUT"])
 @jwt_required()
 def edit_user_info():
@@ -308,11 +333,11 @@ def edit_user_info():
     new_text_notification = request.json.get("text_notification", user_preferences.text_notification)
     new_text_frequency = request.json.get("text_frequency", user_preferences.text_frequency)
 
-    
+    # assigned values
     user.username = new_username
     user.phone = new_phone
-    user.text_notification = new_text_notification
-    user.text_frequency = new_text_frequency
+    user_preferences.text_notification = new_text_notification
+    user_preferences.text_frequency = new_text_frequency
 
     db.session.commit()
     db.session.refresh(user)

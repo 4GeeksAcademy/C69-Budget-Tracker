@@ -17,7 +17,7 @@ import NewAsset from "./pages/NewAsset.js";
 
 import { NavbarComponent } from "./component/navbar";
 
-
+import Settings from "./pages/Settings";
 // Import Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -51,7 +51,7 @@ const Layout = () => {
                         <Route element={<NewAsset />} path="/newasset" />
 
                         <Route element={<h1>Not found!</h1>} path="*" />
-
+                        <Route element={<Settings />} path="/settings" />
                     </Routes>
                 </ScrollToTop>
             </BrowserRouter>
