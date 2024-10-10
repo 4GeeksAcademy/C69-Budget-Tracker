@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import BudgetPanel from '../component/budgetPanel';
 import Header from "../component/header";
+import CountUp from "react-countup";
 
 export default function NetWorth() {
     const [welcome, setWelcome] = useState("");

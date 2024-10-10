@@ -78,6 +78,7 @@
 		"react": "^16.8.4",
 		"react-bootstrap": "^2.10.4",
 		"react-bootstrap-icons": "^1.11.4",
+		"react-countup": "^6.5.3",
 		"react-dom": "^16.8.4",
 		"react-polyfills": "0.0.1",
 		"react-router-dom": "^6.3.0"
