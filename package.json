@@ -80,6 +80,7 @@
 		"react-bootstrap-icons": "^1.11.4",
 		"react-dom": "^16.8.4",
 		"react-polyfills": "0.0.1",
-		"react-router-dom": "^6.3.0"
+		"react-router-dom": "^6.3.0",
+		"recharts": "^2.13.0"
 	}
 }

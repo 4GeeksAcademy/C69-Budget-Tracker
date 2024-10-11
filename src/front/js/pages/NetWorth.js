@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import BudgetPanel from '../component/budgetPanel';
 import Header from "../component/header";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function NetWorth() {
     const [welcome, setWelcome] = useState("");
@@ -9,6 +10,7 @@ export default function NetWorth() {
     const [currentTime, setCurrentTime] = useState("");
     const [liabilitiesData, setLiabilitiesData] = useState({ total: 0, lastUpdated: null });
     const [assetsData, setAssetsData] = useState({ total: 0, lastUpdated: null });
+    const [showChart, setShowChart] = useState(false);
     const { actions, store } = useContext(Context);
     
 
@@ -108,16 +110,43 @@ export default function NetWorth() {
         return date ? date.toLocaleDateString() : 'N/A';
     };
 
-    
+    const toggleChart = () => {
+        setShowChart(!showChart);
+    };
+
+    const prepareChartData = () => {
+        return [
+            { name: 'Assets', value: store.total_assets },
+            { name: 'Liabilities', value: store.total_liabilities },
+            { name: 'Net Worth', value: store.total_assets - store.total_liabilities }
+        ];
+    };
 
     return (
-
         <div className="text-center">
             <Header welcome={welcome} name={"Mr. Kean!"} showBackButton={false} showAddButton={true} />
-            <div className="mt-3" style={{ marginTop: '-25px' }}>
-                <BudgetPanel title={"Net Worth"} total={formatCurrency(store.total_assets - store.total_liabilities)} lastUpdated={formatDate(netWorthLastUpdated)} />
-                <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(store.total_liabilities)} lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
-                <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(store.total_assets)} lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />
+            <div className="mt-3" style={{ marginTop: '-25px', display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ width: showChart ? '40%' : '100%' }}>
+                    <div onClick={toggleChart} style={{ cursor: 'pointer' }}>
+                        <BudgetPanel title={"Net Worth"} total={formatCurrency(store.total_assets - store.total_liabilities)} lastUpdated={formatDate(netWorthLastUpdated)} />
+                    </div>
+                    <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(store.total_liabilities)} lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
+                    <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(store.total_assets)} lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />
+                </div>
+                {showChart && (
+                    <div style={{ width: '55%' }}>
+                        <ResponsiveContainer width="100%" height={400}>
+                            <BarChart data={prepareChartData()}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip formatter={(value) => formatCurrency(value)} />
+                                <Legend />
+                                <Bar dataKey="value" fill="#8884d8" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -41,7 +41,7 @@ export default function Header({ welcome, name, back, page, showBackButton = fal
   };
 
   return (
-    
+
     <div className="App pt-3">
       <div className="container px-5 px-md-4 px-lg-5">
         <div className="d-flex justify-content-between align-items-center mt-4 mb-4">
@@ -51,7 +51,7 @@ export default function Header({ welcome, name, back, page, showBackButton = fal
             <h4 className="font-normal fw-semibold text-muted" style={{ position: 'relative', right: '35px' }}>{welcome} {name}</h4>
 
             <div className="d-flex align-items-center">
-              
+
               {/* BACK BUTTON */}
               {showBackButton && (
                 <span className="back-button" style={{ position: 'relative', top: '-15px', right: '80px' }}>
