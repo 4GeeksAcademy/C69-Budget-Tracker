@@ -333,6 +333,12 @@ def edit_user_info():
     new_text_notification = request.json.get("text_notification", user_preferences.text_notification)
     new_text_frequency = request.json.get("text_frequency", user_preferences.text_frequency)
 
+    existing_user = User.query.filter_by(username = new_username).first()
+    if existing_user and existing_user.id != user.id:
+        return jsonify({"message": "username already in use"}), 404
+
+
+
     # assigned values
     user.username = new_username
     user.phone = new_phone

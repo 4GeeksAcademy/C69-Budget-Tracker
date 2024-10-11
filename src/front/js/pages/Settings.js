@@ -1,8 +1,21 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
+import { useNavigate } from "react-router-dom";
+
+
+
+
+
 
 const Settings = () => {
+
     const { store, actions } = useContext(Context);
+    // const [userInfo, setUserInfo] = useState({
+    //    username: "",
+    //    phone: "",
+    //    textNotification: false,
+    //    textFrequency: "none"
+    // });
     const [username, setUsername] = useState(store.currentUser?.username || "");
     const [phone, setPhone] = useState(store.currentUser?.phone || "");
     const [textNotification, setTextNotification] = useState(store.currentUserPreferences?.text_notification || false);
@@ -11,12 +24,24 @@ const Settings = () => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
+    // useEffect(() => {
+    //     // Load user info when the component mounts
+    //     if (!store.currentUser) {
+    //         actions.loadUserInfo();
+    //     }
+    // }, []);
     useEffect(() => {
         // Load user info when the component mounts
         if (!store.currentUser) {
             actions.loadUserInfo();
+        } else {
+            // Update local state when store values change
+            setUsername(store.currentUser.username || "");
+            setPhone(store.currentUser.phone || "");
+            setTextNotification(store.currentUserPreferences?.text_notification || false);
+            setTextFrequency(store.currentUserPreferences?.text_frequency || "none");
         }
-    }, []);
+    }, [store.currentUser, store.currentUserPreferences]);
 
     const handleSaveUserInfo = async () => {
         const success = await actions.editUserInfo({

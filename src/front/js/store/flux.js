@@ -3,8 +3,43 @@ const getState = ({ getStore, getActions, setStore }) => {
         store: {
             currentUser: null, // Stores the current user's data
             currentUserPreferences: null, // Stores the current user's preferences
+
         },
         actions: {
+
+
+
+
+            // getUserInfo: async () => {
+            //     try {
+            //         const response = await fetch(process.env.BACKEND_URL + "/api/user-info", {
+            //             method: "GET",
+            //             headers: {
+            //                 Authorization: "Bearer " + sessionStorage.getItem("token"),
+            //                 "Content-Type": "application/json"
+            //             },
+                       
+            //         });
+            //         console.log("response from API get user flux", response);
+            //         if (response.ok) {
+            //             const data = await response.json();
+            //             console.log("response jsonified get user", data);
+            //             setStore({
+            //                 currentUser: data.user,
+            //                 currentUserPreferences: data.preferences,
+
+            //             });
+            //         } else {
+            //             const dataError = await response.json();
+            //             console.error("Error fetching user info", dataError.message);
+            //             alert(dataError.message)
+            //         }
+
+            //     } catch (error) {
+            //         console.error("Error loading user", error);
+            //     }
+            // },
+
 
 			editUserInfo: async (updatedUser) => {
 				try {
@@ -84,6 +119,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
                     if (response.ok) {
                         const data = await response.json();
+                        console.log("loaded user info actions jsonified", data)
                         setStore({
                             currentUser: data.user,
                             currentUserPreferences: data.preferences

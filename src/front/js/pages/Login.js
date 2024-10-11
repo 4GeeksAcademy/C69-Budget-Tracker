@@ -13,7 +13,7 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const success = await actions.login( email, password )
-        if (success) navigate("/Home"); 
+        if (success) navigate("/"); 
     }
     
     return (
