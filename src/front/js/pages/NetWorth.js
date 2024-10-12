@@ -114,12 +114,24 @@ export default function NetWorth() {
         setShowChart(!showChart);
     };
 
-    const prepareChartData = () => {
-        return [
-            { name: 'Assets', value: store.total_assets },
-            { name: 'Liabilities', value: store.total_liabilities },
-            { name: 'Net Worth', value: store.total_assets - store.total_liabilities }
-        ];
+    const generateDummyData = () => {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        let netWorth = 500000; // Starting net worth
+        return months.map(month => {
+            netWorth += Math.floor(Math.random() * 50000) - 10000; // Random change between -10k and +40k
+            return {
+                month: month,
+                netWorth: netWorth
+            };
+        });
+    };
+
+    const formatYAxis = (value) => {
+        return `$${(value / 1000000).toFixed(1)}M`;
+    };
+
+    const formatTooltip = (value) => {
+        return [`$${value.toLocaleString()}`, "Net Worth"];
     };
 
     return (
@@ -136,13 +148,14 @@ export default function NetWorth() {
                 {showChart && (
                     <div style={{ width: '55%' }}>
                         <ResponsiveContainer width="100%" height={400}>
-                            <BarChart data={prepareChartData()}>
+                            <BarChart data={generateDummyData()}
+                                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip formatter={(value) => formatCurrency(value)} />
+                                <XAxis dataKey="month" />
+                                <YAxis tickFormatter={formatYAxis} domain={[0, 1000000]} />
+                                <Tooltip formatter={formatTooltip} />
                                 <Legend />
-                                <Bar dataKey="value" fill="#8884d8" />
+                                <Bar dataKey="netWorth" fill="#8884d8" name="Net Worth" />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>

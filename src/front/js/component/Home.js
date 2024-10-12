@@ -59,25 +59,27 @@ function Home() {
 
   return (
     <div className="Home">
-      <Container className="px-5 px-md-4 px-lg-5">
+      <Container className="">
         <div className="d-flex justify-content-between align-items-center mt-4 mb-4">
           <h2 className="text-2xl font-normal">{greeting} Garet!</h2>
           <div className="position-relative" ref={dropdownRef}>
             <button
-              className="add-button btn rounded-circle p-0"
+              className="add-button btn rounded-pill p-0"
               style={{
-                width: '40px',
+                width: '85px',
                 height: '40px',
                 display: 'flex',
-                justifyContent: 'center',
+                justifyContent: 'space-between',
                 alignItems: 'center',
                 background: 'none',
-                border: 'none',
-                padding: 0
+                border: '1px solid #ced4da',
+                padding: '0 10px',
+                borderRadius: '20px'
               }}
               onClick={handleShowAddOptions}
             >
-              <img src={addIcon} alt="Add" style={{ width: '35px', height: '35px' }} />
+              <img src={addIcon} alt="Add" style={{ width: '25px', height: '25px' }} />
+              <span style={{ width: '25px', height: '25px', backgroundColor: '#f8f9fa', borderRadius: '50%' }}></span>
             </button>
             {showAddOptions && (
               <div className="add-options-dropdown">
