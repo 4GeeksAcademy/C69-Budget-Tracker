@@ -7,10 +7,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			total_liabilities: 0,
 		},
 		actions: {
-
-			// forgot password action
-
-
 			fetchAssets: async () => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}api/get-asset`, {
@@ -33,8 +29,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-
-
 			fetchLiabilities: async () => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}api/get-liabilities`, {
@@ -56,10 +50,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error fetching liabilities:", error);
 				}
 			},
-		
 
-
-			// reset password action
+			addLiabilityToStore: (newLiability) => {
+				const store = getStore();
+				const updatedLiabilities = [...store.liabilities, newLiability];
+				const updatedTotalLiabilities = store.total_liabilities + parseFloat(newLiability.amount);
+				setStore({
+					liabilities: updatedLiabilities,
+					total_liabilities: updatedTotalLiabilities,
+				});
+			},
 
 			signUp: async (newUser) => {
 				try {
@@ -88,10 +88,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					alert("Something went wrong, try again later");
 					return false;
 				}
-
 			},
-
-
 
 			login: async (email, password) => {
 				try {

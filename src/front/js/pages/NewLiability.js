@@ -70,13 +70,13 @@ export default function NewLiability() {
       const data = await response.json();
       console.log("Response data:", data);
 
+      // Add the new liability to the store
+      actions.addLiabilityToStore(data);
+
       alert("Liability added successfully");
       setCategory("");
       setDescription("");
       setAmount("");
-      
-      // Fetch updated liabilities
-      await actions.fetchLiabilities();
       
       navigate("/liabilities");
     } catch (error) {
