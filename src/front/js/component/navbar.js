@@ -100,6 +100,15 @@ export const NavbarComponent = () => {
                     >
                       Profile
                     </Link>
+                    <Link 
+                      to="/settings" 
+                      style={dropdownItemStyle}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = '#f8f9fa'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      Settings
+                    </Link>
                     <button 
                       style={dropdownItemStyle}
                       onMouseEnter={(e) => e.target.style.backgroundColor = '#f8f9fa'}

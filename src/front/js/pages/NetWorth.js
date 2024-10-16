@@ -5,6 +5,7 @@ import Header from "../component/header";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function NetWorth() {
+    const { store, actions } = useContext(Context);
     const [welcome, setWelcome] = useState("");
     const [showAddAssetForm, setShowAddAssetForm] = useState(false);
     const [currentTime, setCurrentTime] = useState("");
@@ -136,7 +137,7 @@ export default function NetWorth() {
 
     return (
         <div className="text-center">
-            <Header welcome={welcome} name={"Mr. Kean!"} showBackButton={false} showAddButton={true} />
+            <Header welcome={welcome} name={store.currentUser ? store.currentUser.username : "Guest"} showBackButton={false} showAddButton={true} />
             <div className="mt-3" style={{ marginTop: '-25px', display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ width: showChart ? '40%' : '100%' }}>
                     <div onClick={toggleChart} style={{ cursor: 'pointer' }}>
