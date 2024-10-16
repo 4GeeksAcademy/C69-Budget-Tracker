@@ -10,7 +10,7 @@ export default function NetWorth() {
     const [currentTime, setCurrentTime] = useState("");
     const [liabilitiesData, setLiabilitiesData] = useState({ total: 0, lastUpdated: null });
     const [assetsData, setAssetsData] = useState({ total: 0, lastUpdated: null });
-    const { actions, store } = useContext(Context);
+    
     
 
     useEffect(() => {
