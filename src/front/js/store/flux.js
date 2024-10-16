@@ -1,37 +1,37 @@
 const getState = ({ getStore, getActions, setStore }) => {
 
-	return {
-		store: {
-			assets: [],
-			total_assets: 0,
-			liabilities: [],
-			total_liabilities: 0,
-      currentUser: null, // Stores the current user's data
-      currentUserPreferences: null, // Stores the current user's preferences
-		},
-		actions: {
+    return {
+        store: {
+            assets: [],
+            total_assets: 0,
+            liabilities: [],
+            total_liabilities: 0,
+            currentUser: null, // Stores the current user's data
+            currentUserPreferences: null, // Stores the current user's preferences
+        },
+        actions: {
 
-			fetchAssets: async () => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}api/get-asset`, {
-						headers: {
-							Authorization: "Bearer " + sessionStorage.getItem("token")
-						},
-					});
-					if (response.ok) {
-						const data = await response.json();
-						console.log(data, "data")
-						setStore({
-							assets: data.asset_list,
-							total_assets: data.total,
-						});
-					} else {
-						console.error("Failed to fetch assets");
-					}
-				} catch (error) {
-					console.error("Error fetching assets:", error);
-				}
-			},
+            fetchAssets: async () => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}api/get-asset`, {
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem("token")
+                        },
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log(data, "data")
+                        setStore({
+                            assets: data.asset_list,
+                            total_assets: data.total,
+                        });
+                    } else {
+                        console.error("Failed to fetch assets");
+                    }
+                } catch (error) {
+                    console.error("Error fetching assets:", error);
+                }
+            },
 
             // getUserInfo: async () => {
             //     try {
@@ -41,7 +41,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             //                 Authorization: "Bearer " + sessionStorage.getItem("token"),
             //                 "Content-Type": "application/json"
             //             },
-                       
+
             //         });
             //         console.log("response from API get user flux", response);
             //         if (response.ok) {
@@ -62,96 +62,96 @@ const getState = ({ getStore, getActions, setStore }) => {
             //         console.error("Error loading user", error);
             //     }
             // },
-            
-            
-			fetchLiabilities: async () => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}api/get-liabilities`, {
-						headers: {
-							Authorization: "Bearer " + sessionStorage.getItem("token")
-						},
-					});
-					if (response.ok) {
-						const data = await response.json();
-						console.log(data, "data")
-						setStore({
-							liabilities: data.liability_list,
-							total_liabilities: data.total,
-						});
-					} else {
-						console.error("Failed to fetch liabilities");
-					}
-				} catch (error) {
-					console.error("Error fetching liabilities:", error);
-				}
-			},
-		
-
-			editUserInfo: async (updatedUser) => {
-				try {
-					const response = await fetch(process.env.BACKEND_URL + "/api/edit-user-info", {
-						method: "PUT",
-						headers: {
-							Authorization: "Bearer " + sessionStorage.getItem("token"),
-							"Content-Type": "application/json"
-						},
-						body: JSON.stringify({
-							username: updatedUser.username,
-							phone: updatedUser.phone,
-							text_notification: updatedUser.text_notification,
-							text_frequency: updatedUser.text_frequency
-						})
-					});
-			
-					if (response.ok) {
-						const data = await response.json();
-						setStore({
-							currentUser: data.user,
-							currentUserPreferences: data.preferences
-						});
-						return true;
-					} else {
-						const data = await response.json();
-						alert(data.message);
-						return false;
-					}
-				} catch (error) {
-					console.error("Error updating user info:", error);
-					alert("Something went wrong, try again later.");
-					return false;
-				}
-			},
-			
 
 
-			changePassword: async (passwordDetails) => {
-				try {
-					const response = await fetch(process.env.BACKEND_URL + "/api/change-password", {
-						method: "PUT",
-						headers: {
-							Authorization: "Bearer " + sessionStorage.getItem("token"),
-							"Content-Type": "application/json"
-						},
-						body: JSON.stringify({
-							current_password: passwordDetails.currentPassword,
-							new_password: passwordDetails.newPassword
-						})
-					});
-			
-					const data = await response.json();
-					if (!response.ok) {
-						alert(data.message);
-						return false;
-					}
-			
-					return true;
-				} catch (error) {
-					console.error("Error changing password", error);
-					alert("Something went wrong, try again later.");
-					return false;
-				}
-			},
-			
+            fetchLiabilities: async () => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}api/get-liabilities`, {
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem("token")
+                        },
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log(data, "data")
+                        setStore({
+                            liabilities: data.liability_list,
+                            total_liabilities: data.total,
+                        });
+                    } else {
+                        console.error("Failed to fetch liabilities");
+                    }
+                } catch (error) {
+                    console.error("Error fetching liabilities:", error);
+                }
+            },
+
+
+            editUserInfo: async (updatedUser) => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL + "/api/edit-user-info", {
+                        method: "PUT",
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem("token"),
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            username: updatedUser.username,
+                            phone: updatedUser.phone,
+                            text_notification: updatedUser.text_notification,
+                            text_frequency: updatedUser.text_frequency
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        setStore({
+                            currentUser: data.user,
+                            currentUserPreferences: data.preferences
+                        });
+                        return true;
+                    } else {
+                        const data = await response.json();
+                        alert(data.message);
+                        return false;
+                    }
+                } catch (error) {
+                    console.error("Error updating user info:", error);
+                    alert("Something went wrong, try again later.");
+                    return false;
+                }
+            },
+
+
+
+            changePassword: async (passwordDetails) => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL + "/api/change-password", {
+                        method: "PUT",
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem("token"),
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            current_password: passwordDetails.currentPassword,
+                            new_password: passwordDetails.newPassword
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (!response.ok) {
+                        alert(data.message);
+                        return false;
+                    }
+
+                    return true;
+                } catch (error) {
+                    console.error("Error changing password", error);
+                    alert("Something went wrong, try again later.");
+                    return false;
+                }
+            },
+
             // Fetch the current user and preferences
             loadUserInfo: async () => {
                 try {

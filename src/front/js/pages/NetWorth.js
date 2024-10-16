@@ -10,7 +10,7 @@ export default function NetWorth() {
     const [currentTime, setCurrentTime] = useState("");
     const [liabilitiesData, setLiabilitiesData] = useState({ total: 0, lastUpdated: null });
     const [assetsData, setAssetsData] = useState({ total: 0, lastUpdated: null });
-    const { actions, store } = useContext(Context);
+    
     
 
     useEffect(() => {
@@ -114,7 +114,7 @@ export default function NetWorth() {
     return (
 
         <div className="text-center">
-            <Header welcome={welcome} name={"Mr. Kean!"} showBackButton={false} showAddButton={true} />
+            <Header welcome={welcome} name={store.currentUser ? store.currentUser.username : "Guest"} showBackButton={false} showAddButton={true} />
             <div className="mt-3" style={{ marginTop: '-25px' }}>
                 <BudgetPanel title={"Net Worth"} total={formatCurrency(store.total_assets - store.total_liabilities)} lastUpdated={formatDate(netWorthLastUpdated)} />
                 <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(store.total_liabilities)} lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
