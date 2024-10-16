@@ -1,14 +1,37 @@
 const getState = ({ getStore, getActions, setStore }) => {
-    return {
-        store: {
-            currentUser: null, // Stores the current user's data
-            currentUserPreferences: null, // Stores the current user's preferences
 
-        },
-        actions: {
+	return {
+		store: {
+			assets: [],
+			total_assets: 0,
+			liabilities: [],
+			total_liabilities: 0,
+      currentUser: null, // Stores the current user's data
+      currentUserPreferences: null, // Stores the current user's preferences
+		},
+		actions: {
 
-
-
+			fetchAssets: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/get-asset`, {
+						headers: {
+							Authorization: "Bearer " + sessionStorage.getItem("token")
+						},
+					});
+					if (response.ok) {
+						const data = await response.json();
+						console.log(data, "data")
+						setStore({
+							assets: data.asset_list,
+							total_assets: data.total,
+						});
+					} else {
+						console.error("Failed to fetch assets");
+					}
+				} catch (error) {
+					console.error("Error fetching assets:", error);
+				}
+			},
 
             // getUserInfo: async () => {
             //     try {
@@ -39,7 +62,30 @@ const getState = ({ getStore, getActions, setStore }) => {
             //         console.error("Error loading user", error);
             //     }
             // },
-
+            
+            
+			fetchLiabilities: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/get-liabilities`, {
+						headers: {
+							Authorization: "Bearer " + sessionStorage.getItem("token")
+						},
+					});
+					if (response.ok) {
+						const data = await response.json();
+						console.log(data, "data")
+						setStore({
+							liabilities: data.liability_list,
+							total_liabilities: data.total,
+						});
+					} else {
+						console.error("Failed to fetch liabilities");
+					}
+				} catch (error) {
+					console.error("Error fetching liabilities:", error);
+				}
+			},
+		
 
 			editUserInfo: async (updatedUser) => {
 				try {

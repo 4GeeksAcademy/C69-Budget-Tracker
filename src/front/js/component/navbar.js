@@ -85,7 +85,7 @@ export const NavbarComponent = () => {
               onClick={() => setShowDropdown(!showDropdown)}
             >
               <List size={20} className="text-dark" />
-              <PersonCircle size={20} className="text-dark" />
+              <PersonCircle size={25} className="text-dark" />
             </button>
             {showDropdown && (
               <div style={dropdownStyle}>

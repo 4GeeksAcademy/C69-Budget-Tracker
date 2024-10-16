@@ -70,8 +70,7 @@ class Asset(db.Model):
             "category": self.category,
             "amount": self.amount,
             "description": self.description,
-            "last_updated": self.last_updated
-            
+            "last_updated": self.last_updated,
         }
     
 class Liability(db.Model):
