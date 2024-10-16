@@ -221,6 +221,37 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return false;
                 }
             },
+			fetchLiabilities: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}api/get-liabilities`, {
+						headers: {
+							Authorization: "Bearer " + sessionStorage.getItem("token")
+						},
+					});
+					if (response.ok) {
+						const data = await response.json();
+						console.log(data, "data")
+						setStore({
+							liabilities: data.liability_list,
+							total_liabilities: data.total,
+						});
+					} else {
+						console.error("Failed to fetch liabilities");
+					}
+				} catch (error) {
+					console.error("Error fetching liabilities:", error);
+				}
+			},
+
+			addLiabilityToStore: (newLiability) => {
+				const store = getStore();
+				const updatedLiabilities = [...store.liabilities, newLiability];
+				const updatedTotalLiabilities = store.total_liabilities + parseFloat(newLiability.amount);
+				setStore({
+					liabilities: updatedLiabilities,
+					total_liabilities: updatedTotalLiabilities,
+				});
+			},
 
             signUp: async (newUser) => {
                 try {
