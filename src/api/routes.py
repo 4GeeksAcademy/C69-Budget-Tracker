@@ -275,3 +275,91 @@ def delete_liability(liability_id):
     db.session.delete(liability)
     db.session.commit()
     return jsonify({"message": "Liability deleted"}), 200
+
+
+
+# routes for user data 
+@api.route("/user-info", methods=["GET"])
+@jwt_required()
+def get_user_info():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    user_preferences = UserPreferences.query.filter_by(user_id=user.id).first()
+    user_data = user.serialize()
+    preferences_data = user_preferences.serialize() if user_preferences else {}
+
+    response_body = {
+        "user": user_data,
+        "preferences": preferences_data
+    }
+
+    return jsonify(response_body), 200
+
+
+
+        # Change password
+@api.route("/change-password", methods=["PUT"])
+@jwt_required()
+def change_password():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user).first()
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    data = request.get_json()
+    current_password = data.get("current_password")
+    new_password = data.get("new_password")
+
+    if not check_password_hash(user.password, current_password):
+        return jsonify({"message": "Incorrect current password"}), 401
+
+    user.password = generate_password_hash(new_password)
+    db.session.commit()
+
+    return jsonify({"message": "Password changed successfully"}), 200
+
+
+@api.route("/edit-user-info", methods=["PUT"])
+@jwt_required()
+def edit_user_info():
+    current_user = get_jwt_identity()
+    user=User.query.filter_by(email=current_user).first()
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    user_preferences = UserPreferences.query.filter_by(user_id=user.id).first()
+
+    
+    new_username = request.json.get("username", user.username)
+    new_phone = request.json.get("phone", user.phone)
+    new_text_notification = request.json.get("text_notification", user_preferences.text_notification)
+    new_text_frequency = request.json.get("text_frequency", user_preferences.text_frequency)
+
+    existing_user = User.query.filter_by(username = new_username).first()
+    if existing_user and existing_user.id != user.id:
+        return jsonify({"message": "username already in use"}), 404
+
+
+
+    # assigned values
+    user.username = new_username
+    user.phone = new_phone
+    user_preferences.text_notification = new_text_notification
+    user_preferences.text_frequency = new_text_frequency
+
+    db.session.commit()
+    db.session.refresh(user)
+    db.session.refresh(user_preferences)
+
+
+    response_body = {
+        "message": "User information updated successfully",
+        "user": user.serialize(),
+        "preferences": user_preferences.serialize() 
+    }
+
+    return jsonify(response_body), 200

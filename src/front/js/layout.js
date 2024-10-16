@@ -17,7 +17,7 @@ import NewAsset from "./pages/NewAsset.js";
 
 import { NavbarComponent } from "./component/navbar";
 
-
+import Settings from "./pages/Settings";
 // Import Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -35,19 +35,19 @@ const Layout = () => {
                 <ScrollToTop>
                     <NavbarComponent />
                     <Routes>
-
                         <Route element={<Home />} path="/Home" />
-                        <Route element={<h1>Not found!</h1>} path="*" />
                         <Route element={<Dashboard />} path="/dashboard" />
-                        <Route element={<Login />} path="/login" />
                         <Route element={<Signup />} path="/signup" />
+                        <Route element={<Login />} path="/login" />
                         <Route element={<ForgotPassword />} path="/forgot-password" />
+                        {/* <Route element={<NetWorth />} path="/networth" /> */}
                         <Route element={<NetWorth />} path="/" />
                         <Route element={<Liabilities />} path="/liabilities" />
-                        <Route element={<Assets />} path="/assets" />
                         <Route element={<NewLiability />} path="/newliability" />
+                        <Route element={<Assets />} path="/assets" />
                         <Route element={<NewAsset />} path="/newasset" />
-
+                        <Route element={<h1>Not found!</h1>} path="*" />
+                        <Route element={<Settings />} path="/settings" />
                     </Routes>
                 </ScrollToTop>
             </BrowserRouter>
