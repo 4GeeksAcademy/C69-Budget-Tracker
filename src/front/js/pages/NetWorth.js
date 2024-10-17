@@ -2,14 +2,17 @@ import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import BudgetPanel from '../component/budgetPanel';
 import Header from "../component/header";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import CountUp from "react-countup";
 
 export default function NetWorth() {
+    const { store, actions } = useContext(Context);
     const [welcome, setWelcome] = useState("");
     const [showAddAssetForm, setShowAddAssetForm] = useState(false);
     const [currentTime, setCurrentTime] = useState("");
     const [liabilitiesData, setLiabilitiesData] = useState({ total: 0, lastUpdated: null });
     const [assetsData, setAssetsData] = useState({ total: 0, lastUpdated: null });
+    const [showChart, setShowChart] = useState(false);
     const { actions, store } = useContext(Context);
     
     const calculateDuration = (amount) => {
@@ -114,16 +117,56 @@ export default function NetWorth() {
         return date ? date.toLocaleDateString() : 'N/A';
     };
 
-    
+    const toggleChart = () => {
+        setShowChart(!showChart);
+    };
+
+    const generateDummyData = () => {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        let netWorth = 500000; // Starting net worth
+        return months.map(month => {
+            netWorth += Math.floor(Math.random() * 50000) - 10000; // Random change between -10k and +40k
+            return {
+                month: month,
+                netWorth: netWorth
+            };
+        });
+    };
+
+    const formatYAxis = (value) => {
+        return `$${(value / 1000000).toFixed(1)}M`;
+    };
+
+    const formatTooltip = (value) => {
+        return [`$${value.toLocaleString()}`, "Net Worth"];
+    };
 
     return (
-
         <div className="text-center">
-            <Header welcome={welcome} name={"Mr. Kean!"} showBackButton={false} showAddButton={true} />
-            <div className="mt-3" style={{ marginTop: '-25px' }}>
-                <BudgetPanel title={"Net Worth"} total={formatCurrency(store.total_assets - store.total_liabilities)} duration={calculateDuration(netWorth)}  lastUpdated={formatDate(netWorthLastUpdated)} />
-                <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(store.total_assets)} duration={calculateDuration(store.total_assets)}  lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />
-                <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(store.total_liabilities)} duration={calculateDuration(store.total_liabilities)}  lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
+            <Header welcome={welcome} name={store.currentUser ? store.currentUser.username : "Guest"} showBackButton={false} showAddButton={true} />
+            <div className="mt-3" style={{ marginTop: '-25px', display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ width: showChart ? '40%' : '100%' }}>
+                    <div onClick={toggleChart} style={{ cursor: 'pointer' }}>
+                        <BudgetPanel title={"Net Worth"} total={formatCurrency(store.total_assets - store.total_liabilities)} duration={calculateDuration(netWorth)} lastUpdated={formatDate(netWorthLastUpdated)} />
+                    </div>
+                    <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(store.total_assets)} duration={calculateDuration(store.total_assets)} lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />
+                    <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(store.total_liabilities)} duration={calculateDuration(store.total_liabilities)} lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
+                </div>
+                {showChart && (
+                    <div style={{ width: '55%' }}>
+                        <ResponsiveContainer width="100%" height={400}>
+                            <BarChart data={generateDummyData()}
+                                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="month" />
+                                <YAxis tickFormatter={formatYAxis} domain={[0, 1000000]} />
+                                <Tooltip formatter={formatTooltip} />
+                                <Legend />
+                                <Bar dataKey="netWorth" fill="#8884d8" name="Net Worth" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                )}
             </div>
         </div>
     );
