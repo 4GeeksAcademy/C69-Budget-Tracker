@@ -74,10 +74,12 @@
 	},
 	"dependencies": {
 		"bootstrap": "^5.3.3",
+		"countup": "^1.8.2",
 		"prop-types": "^15.6.1",
 		"react": "^16.8.4",
 		"react-bootstrap": "^2.10.4",
 		"react-bootstrap-icons": "^1.11.4",
+		"react-countup": "^6.5.3",
 		"react-dom": "^16.8.4",
 		"react-polyfills": "0.0.1",
 		"react-router-dom": "^6.3.0",

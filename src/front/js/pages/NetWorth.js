@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import BudgetPanel from '../component/budgetPanel';
 import Header from "../component/header";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import CountUp from "react-countup";
 
 export default function NetWorth() {
     const { store, actions } = useContext(Context);
@@ -14,6 +15,11 @@ export default function NetWorth() {
     const [showChart, setShowChart] = useState(false);
     
     
+    const calculateDuration = (amount) => {
+        const baseDuration = 2;
+        const additionalDuration = Math.log10(Math.abs(amount) + 10) / 2;
+        return baseDuration + additionalDuration;
+    };
 
     useEffect(() => {
         console.log("fetch called")
@@ -141,10 +147,10 @@ export default function NetWorth() {
             <div className="mt-3" style={{ marginTop: '-25px', display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ width: showChart ? '40%' : '100%' }}>
                     <div onClick={toggleChart} style={{ cursor: 'pointer' }}>
-                        <BudgetPanel title={"Net Worth"} total={formatCurrency(store.total_assets - store.total_liabilities)} lastUpdated={formatDate(netWorthLastUpdated)} />
+                        <BudgetPanel title={"Net Worth"} total={formatCurrency(store.total_assets - store.total_liabilities)} duration={calculateDuration(netWorth)} lastUpdated={formatDate(netWorthLastUpdated)} />
                     </div>
-                    <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(store.total_liabilities)} lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
-                    <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(store.total_assets)} lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />
+                    <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(store.total_assets)} duration={calculateDuration(store.total_assets)} lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />
+                    <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(store.total_liabilities)} duration={calculateDuration(store.total_liabilities)} lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
                 </div>
                 {showChart && (
                     <div style={{ width: '55%' }}>
