@@ -58,21 +58,21 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-//             var category = 'happiness'
-//             $.ajax({
-//             method: 'GET',
-//             url: 'https://api.api-ninjas.com/v1/quotes?category=' + category,
-//             headers: { 'X-Api-Key': 'YOUR_API_KEY'},
-//             contentType: 'application/json',
-//             success: function(result) {
-//             console.log(result);
-//     },
-//             error: function ajaxError(jqXHR) {
-//             console.error('Error: ', jqXHR.responseText);
-//     }
-// });
+            //             var category = 'happiness'
+            //             $.ajax({
+            //             method: 'GET',
+            //             url: 'https://api.api-ninjas.com/v1/quotes?category=' + category,
+            //             headers: { 'X-Api-Key': 'YOUR_API_KEY'},
+            //             contentType: 'application/json',
+            //             success: function(result) {
+            //             console.log(result);
+            //     },
+            //             error: function ajaxError(jqXHR) {
+            //             console.error('Error: ', jqXHR.responseText);
+            //     }
+            // });
 
-            
+
             fetchLiabilities: async () => {
                 try {
                     const response = await fetch(`${process.env.BACKEND_URL}api/get-liabilities`, {
@@ -259,6 +259,15 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({
                     liabilities: updatedLiabilities,
                     total_liabilities: updatedTotalLiabilities,
+                });
+            },
+            addAssetToStore: (newAsset) => {
+                const store = getStore();
+                const updatedAssets = [...store.assets, newAsset];
+                const updatedTotalAssets = store.total_assets + parseFloat(newAsset.amount);
+                setStore({
+                    assets: updatedAssets,
+                    total_assets: updatedTotalAssets,
                 });
             },
 
