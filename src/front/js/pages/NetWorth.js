@@ -22,6 +22,10 @@ export default function NetWorth() {
     };
 
     useEffect(() => {
+        actions.getQuotes();
+    },[])
+
+    useEffect(() => {
         console.log("fetch called")
         actions.fetchAssets();
     }, []);

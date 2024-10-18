@@ -1,3 +1,5 @@
+
+
 const getState = ({ getStore, getActions, setStore }) => {
 
     return {
@@ -8,6 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             total_liabilities: 0,
             currentUser: null, // Stores the current user's data
             currentUserPreferences: null, // Stores the current user's preferences
+            quotes: null,
         },
         actions: {
 
@@ -33,37 +36,43 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            // getUserInfo: async () => {
-            //     try {
-            //         const response = await fetch(process.env.BACKEND_URL + "/api/user-info", {
-            //             method: "GET",
-            //             headers: {
-            //                 Authorization: "Bearer " + sessionStorage.getItem("token"),
-            //                 "Content-Type": "application/json"
-            //             },
+            // QUOTE NINJAS API
 
-            //         });
-            //         console.log("response from API get user flux", response);
-            //         if (response.ok) {
-            //             const data = await response.json();
-            //             console.log("response jsonified get user", data);
-            //             setStore({
-            //                 currentUser: data.user,
-            //                 currentUserPreferences: data.preferences,
-
-            //             });
-            //         } else {
-            //             const dataError = await response.json();
-            //             console.error("Error fetching user info", dataError.message);
-            //             alert(dataError.message)
-            //         }
-
-            //     } catch (error) {
-            //         console.error("Error loading user", error);
-            //     }
-            // },
+            getQuotes: async () => {
+                try {
+                    const response = await fetch("https://api.api-ninjas.com/v1/quotes?category=money", {
+                        method: "GET",
+                        headers: {
+                            'X-Api-Key': process.env.API_NINJAS_KEY,
+                            "Content-Type": "application/json",
+                        },
 
 
+                    })
+                    if (!response.ok) { throw new Error(`Error: ${response.statusText}`) }
+                    const result = await response.json();
+                    setStore({ quotes: result })
+                    console.log("result from API Ninjas", result);
+                } catch (error) {
+                    console.error("error fetching quote", error.message)
+                }
+            },
+
+//             var category = 'happiness'
+//             $.ajax({
+//             method: 'GET',
+//             url: 'https://api.api-ninjas.com/v1/quotes?category=' + category,
+//             headers: { 'X-Api-Key': 'YOUR_API_KEY'},
+//             contentType: 'application/json',
+//             success: function(result) {
+//             console.log(result);
+//     },
+//             error: function ajaxError(jqXHR) {
+//             console.error('Error: ', jqXHR.responseText);
+//     }
+// });
+
+            
             fetchLiabilities: async () => {
                 try {
                     const response = await fetch(`${process.env.BACKEND_URL}api/get-liabilities`, {
@@ -221,37 +230,37 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return false;
                 }
             },
-			fetchLiabilities: async () => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}api/get-liabilities`, {
-						headers: {
-							Authorization: "Bearer " + sessionStorage.getItem("token")
-						},
-					});
-					if (response.ok) {
-						const data = await response.json();
-						console.log(data, "data")
-						setStore({
-							liabilities: data.liability_list,
-							total_liabilities: data.total,
-						});
-					} else {
-						console.error("Failed to fetch liabilities");
-					}
-				} catch (error) {
-					console.error("Error fetching liabilities:", error);
-				}
-			},
+            fetchLiabilities: async () => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}api/get-liabilities`, {
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem("token")
+                        },
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log(data, "data")
+                        setStore({
+                            liabilities: data.liability_list,
+                            total_liabilities: data.total,
+                        });
+                    } else {
+                        console.error("Failed to fetch liabilities");
+                    }
+                } catch (error) {
+                    console.error("Error fetching liabilities:", error);
+                }
+            },
 
-			addLiabilityToStore: (newLiability) => {
-				const store = getStore();
-				const updatedLiabilities = [...store.liabilities, newLiability];
-				const updatedTotalLiabilities = store.total_liabilities + parseFloat(newLiability.amount);
-				setStore({
-					liabilities: updatedLiabilities,
-					total_liabilities: updatedTotalLiabilities,
-				});
-			},
+            addLiabilityToStore: (newLiability) => {
+                const store = getStore();
+                const updatedLiabilities = [...store.liabilities, newLiability];
+                const updatedTotalLiabilities = store.total_liabilities + parseFloat(newLiability.amount);
+                setStore({
+                    liabilities: updatedLiabilities,
+                    total_liabilities: updatedTotalLiabilities,
+                });
+            },
 
             signUp: async (newUser) => {
                 try {
