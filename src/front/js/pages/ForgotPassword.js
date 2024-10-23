@@ -10,6 +10,7 @@ export const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     const [error, setErrMsg] = useState("");
     const [hasToken, setHasToken] = useState(false);

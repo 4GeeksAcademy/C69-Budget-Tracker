@@ -11,7 +11,7 @@ const Settings = () => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-
+    const [showPassword, setShowPassword] = useState(false);
     useEffect(() => {
         if (!store.currentUser) {
             actions.loadUserInfo();
@@ -37,7 +37,9 @@ const Settings = () => {
             alert("Failed to update settings. Please try again.");
         }
     };
-
+    const handlePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
     const handleChangePassword = async () => {
         if (newPassword !== confirmPassword) {
             alert("New password and confirm password do not match!");
@@ -109,33 +111,58 @@ const Settings = () => {
             </form>
 
             <h3 className="mt-5">Change Password</h3>
-            <form>
+            <form className="auth">
                 <div className="mb-3">
                     <label className="form-label">Current Password</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        value={currentPassword}
-                        onChange={(e) => setCurrentPassword(e.target.value)}
-                    />
+                    <div className="input-group">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            className="form-control"
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                        />
+                        <i
+                            className={`position-absolute top-50 end-0 translate-middle-y me-3 text-muted fa-regular ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                            style={{ cursor: "pointer", pointerEvents: "auto", zIndex: 10 }}
+                            onClick={handlePasswordVisibility}
+                        />
+                    </div>
+
                 </div>
                 <div className="mb-3">
+
                     <label className="form-label">New Password</label>
-                    <input
-                        type="password"
+                    <div className="input-group" >
+                        <input
+                        type={showPassword ? "text" : "password"}
                         className="form-control"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                     />
+                     <i
+                            className={`position-absolute top-50 end-0 translate-middle-y me-3 text-muted fa-regular ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                            style={{ cursor: "pointer", pointerEvents: "auto", zIndex: 10 }}
+                            onClick={handlePasswordVisibility}
+                        />
+                    </div>
+                    
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Confirm New Password</label>
-                    <input
-                        type="password"
+                    <div className="input-group">
+                        <input
+                        type={showPassword ? "text" : "password"}
                         className="form-control"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
+                     <i
+                            className={`position-absolute top-50 end-0 translate-middle-y me-3 text-muted fa-regular ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                            style={{ cursor: "pointer", pointerEvents: "auto", zIndex: 10 }}
+                            onClick={handlePasswordVisibility}
+                        />
+                    </div>
+                    
                 </div>
                 <button type="button" className="btn btn-danger w-100" onClick={handleChangePassword}>
                     Change Password

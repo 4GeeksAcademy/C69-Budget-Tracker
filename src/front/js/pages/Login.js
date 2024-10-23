@@ -9,6 +9,7 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const { actions } = useContext(Context);
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
