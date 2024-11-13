@@ -95,7 +95,7 @@ def forgot_password():
     expiration_time=datetime.utcnow() + timedelta(hours = 1)
     token = jwt.encode({"email": email, "exp": expiration_time}, os.getenv("FLASK_APP_KEY"), algorithm="HS256")
 
-    email_value=f"Click here to reset password.\n{os.getenv('FRONTEND_URL')}/forgot-password?token={token}"
+    email_value=f"Click here to reset password.\n{os.getenv('FRONTEND_URL')}forgot-password?token={token}"
     send_email(email, email_value, "password recover: Koyo")
     return jsonify({"message": "recovery email sent"}), 200
 
