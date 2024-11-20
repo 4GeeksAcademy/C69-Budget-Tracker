@@ -13,13 +13,17 @@ export default function NetWorth() {
     const [liabilitiesData, setLiabilitiesData] = useState({ total: 0, lastUpdated: null });
     const [assetsData, setAssetsData] = useState({ total: 0, lastUpdated: null });
     const [showChart, setShowChart] = useState(false);
-    
-    
+
+
     const calculateDuration = (amount) => {
         const baseDuration = 2;
         const additionalDuration = Math.log10(Math.abs(amount) + 10) / 2;
         return baseDuration + additionalDuration;
     };
+
+    useEffect(() => {
+        actions.getQuotes();
+    }, [])
 
     useEffect(() => {
         console.log("fetch called")
@@ -47,7 +51,7 @@ export default function NetWorth() {
                 if (response.ok) {
                     const liabilities = await response.json();
                     const total = liabilities.reduce((sum, liability) => sum + parseFloat(liability.amount), 0);
-                    const lastUpdated = liabilities.reduce((latest, liability) => 
+                    const lastUpdated = liabilities.reduce((latest, liability) =>
                         latest > new Date(liability.last_updated) ? latest : new Date(liability.last_updated),
                         new Date(0)
                     );
@@ -66,7 +70,7 @@ export default function NetWorth() {
                 if (response.ok) {
                     const assets = await response.json();
                     const total = assets.reduce((sum, asset) => sum + parseFloat(asset.amount), 0);
-                    const lastUpdated = assets.reduce((latest, asset) => 
+                    const lastUpdated = assets.reduce((latest, asset) =>
                         latest > new Date(asset.last_updated) ? latest : new Date(asset.last_updated),
                         new Date(0)
                     );
@@ -156,7 +160,7 @@ export default function NetWorth() {
                     <div style={{ width: '55%' }}>
                         <ResponsiveContainer width="100%" height={400}>
                             <BarChart data={generateDummyData()}
-                                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="month" />
                                 <YAxis tickFormatter={formatYAxis} domain={[0, 1000000]} />
@@ -166,6 +170,15 @@ export default function NetWorth() {
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
+                )}
+            </div>
+            <div className="Quotes">
+                {store.quotes && store.quotes.length > 0 ? (
+                    store.quotes.map((quote, index) => (
+                        <p key={index}>{quote.quote} - {quote.author}</p>
+                    ))
+                ) : (
+                    <p>Loading quotes...</p>
                 )}
             </div>
         </div>
