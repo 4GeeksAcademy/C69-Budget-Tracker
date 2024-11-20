@@ -37,9 +37,9 @@ export default function InformationPanel(props) {
     return (
         <div className="card w-75 mx-auto m-2 rounded-4 shadow-sm border-light-subtle">
             <div className="card-body d-flex justify-content-between px-3 pb-1 ms-4" style={{ position: 'relative', top: '7px' }}>
-                <div className="col-1">{props.category}</div>
+                <div className="col-1 lh-1 text-truncate">{props.category}</div>
                 <div className="col-1 lh-1 text-truncate">{props.description}</div>
-                <div className="col-1">${props.amount}</div>
+                <div className="col-1 lh-1 text-truncate">${props.amount}</div>
                 <div className="col-1">{props.lastUpdated}</div>
                 <div ref={dropdownRef}>
                     <button 

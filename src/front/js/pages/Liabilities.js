@@ -13,6 +13,10 @@ export default function Liabilities() {
         actions.fetchLiabilities();
     }, []);
 
+    const mostRecentDate = store.liabilities.reduce((latest, liabilities) => {
+        const liabilitiesDate = new Date(liabilities.last_updated);
+        return liabilitiesDate > latest ? liabilitiesDate : latest;
+    }, new Date(0))
 
     // const addNewLiability = async () => {
     //     try {
@@ -38,12 +42,12 @@ export default function Liabilities() {
     //     }
     // };
 
-    return (       
+    return (
         <div className="text-center">
             <Header back={<i className="fa-solid fa-chevron-left"></i>} page={"Liabilities"} showBackButton={true} showAddButton={true} />
             <CategoryLabels category={"Category"} description={"Description"} amount={"Amount"} lastUpdated={"Last Updated"} />
             {store.liabilities.map((liability) => (
-                <InformationPanel key={liability.id} category={liability.category} description={liability.description} amount={parseFloat(liability.amount).toFixed(2)} lastUpdated={new Date(liability.last_updated).toLocaleDateString()} /> ))}
+                <InformationPanel key={liability.id} category={liability.category} description={liability.description} amount={parseFloat(liability.amount).toFixed(2)} lastUpdated={new Date(liability.last_updated).toLocaleDateString()} />))}
         </div>
     );
 }

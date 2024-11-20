@@ -44,7 +44,7 @@ export default function Header({ welcome, name, back, page, showBackButton = fal
 
     <div className="App pt-3">
       <div className="container px-5 px-md-4 px-lg-5">
-        <div className="d-flex justify-content-between align-items-center mt-4 mb-4">
+        <div className="d-flex justify-content-between align-items-center mt-3 mb-4">
           <div className="d-flex flex-column">
 
             {/* GREETING */}
@@ -104,11 +104,11 @@ export default function Header({ welcome, name, back, page, showBackButton = fal
                   width: '175px',
                   zIndex: 1000
                 }}>
-                  <button onClick={handleAddLiabilityClick} className="list-group-item list-group-item-action d-flex justify-content-beginning">
-                    <i className="fa-solid fa-credit-card pt-1 me-3"></i> Add Liability
-                  </button>
                   <button onClick={handleAddAssetClick} className="list-group-item list-group-item-action d-flex justify-content-beginning">
                     <i className="fa-solid fa-money-bills pt-1 me-3"></i> Add Asset
+                  </button>
+                  <button onClick={handleAddLiabilityClick} className="list-group-item list-group-item-action d-flex justify-content-beginning">
+                    <i className="fa-solid fa-credit-card pt-1 me-3"></i> Add Liability
                   </button>
                 </div>
               )}
