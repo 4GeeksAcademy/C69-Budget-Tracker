@@ -10,10 +10,10 @@ export default function BudgetPanel(props) {
     };
     return (
         <div className="card w-75 mx-auto m-3 rounded-4 shadow-sm border-light-subtle">
-            <div className="card-body ps-4 pb-1 pe-4 pt-4">
+            <div className="card-body ps-4 pb-1 pe-4 pt-1">
                 <p className="card-title d-flex text-body-tertiary fw-medium">{props.title}</p>
                 <h1
-                    className={`d-flex ${getTotalClass()} pb-3`}>
+                    className={`d-flex ${getTotalClass()} pb-3`}>$
                     <CountUp end={totalValue} start={0.00} duration={props.duration} />
                 </h1>
                 <div className="d-flex justify-content-between align-items-center">

@@ -13,6 +13,10 @@ export default function Assets() {
         actions.fetchAssets();
     }, []);
 
+    const mostRecentDate = store.assets.reduce((latest, asset) => {
+        const assetDate = new Date(asset.last_updated);
+        return assetDate > latest ? assetDate : latest;
+    }, new Date(0))
 
     // const addNewAsset = async () => {
     //     try {
@@ -43,7 +47,7 @@ export default function Assets() {
             <Header back={<i className="fa-solid fa-chevron-left"></i>} page={"Assets"} showBackButton showAddButton />
             <CategoryLabels category={"Category"} description={"Description"} amount={"Amount"} lastUpdated={"Last Updated"} />
             {store.assets.map((asset) => (
-                <InformationPanel key={asset.id} category={asset.category} description={asset.description} amount={parseFloat(asset.amount).toFixed(2)} lastUpdated={new Date(asset.last_updated).toLocaleDateString()} /> ))}
+                <InformationPanel key={asset.id} category={asset.category} description={asset.description} amount={parseFloat(asset.amount).toFixed(2)} lastUpdated={new Date(asset.last_updated).toLocaleDateString()} />))}
         </div>
     );
 }

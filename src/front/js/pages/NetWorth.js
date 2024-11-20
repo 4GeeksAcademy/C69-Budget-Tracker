@@ -14,7 +14,6 @@ export default function NetWorth() {
     const [assetsData, setAssetsData] = useState({ total: 0, lastUpdated: null });
     const [showChart, setShowChart] = useState(false);
 
-
     const calculateDuration = (amount) => {
         const baseDuration = 2;
         const additionalDuration = Math.log10(Math.abs(amount) + 10) / 2;
@@ -52,6 +51,7 @@ export default function NetWorth() {
                     const liabilities = await response.json();
                     const total = liabilities.reduce((sum, liability) => sum + parseFloat(liability.amount), 0);
                     const lastUpdated = liabilities.reduce((latest, liability) =>
+                    const lastUpdated = liabilities.reduce((latest, liability) =>
                         latest > new Date(liability.last_updated) ? latest : new Date(liability.last_updated),
                         new Date(0)
                     );
@@ -70,6 +70,7 @@ export default function NetWorth() {
                 if (response.ok) {
                     const assets = await response.json();
                     const total = assets.reduce((sum, asset) => sum + parseFloat(asset.amount), 0);
+                    const lastUpdated = assets.reduce((latest, asset) =>
                     const lastUpdated = assets.reduce((latest, asset) =>
                         latest > new Date(asset.last_updated) ? latest : new Date(asset.last_updated),
                         new Date(0)
@@ -97,10 +98,19 @@ export default function NetWorth() {
     }, []);
 
     const netWorth = assetsData.total - liabilitiesData.total;
-    const netWorthLastUpdated = new Date(Math.max(
-        assetsData.lastUpdated ? assetsData.lastUpdated.getTime() : 0,
-        liabilitiesData.lastUpdated ? liabilitiesData.lastUpdated.getTime() : 0
-    ));
+
+    const mostRecentAssetsDate = store.assets.reduce((latest, asset) => {
+        const assetDate = new Date(asset.last_updated);
+        return assetDate > latest ? assetDate : latest;
+    }, new Date(0))
+
+    const mostRecentLiabilitiesDate = store.liabilities.reduce((latest, liabilities) => {
+        const liabilitiesDate = new Date(liabilities.last_updated);
+        return liabilitiesDate > latest ? liabilitiesDate : latest;
+    }, new Date(0))
+
+    const netWorthLastUpdated = mostRecentAssetsDate > mostRecentLiabilitiesDate ? mostRecentAssetsDate : mostRecentLiabilitiesDate;
+
 
     const getGreeting = () => {
         const hour = new Date().getHours();
@@ -147,19 +157,20 @@ export default function NetWorth() {
 
     return (
         <div className="text-center">
-            <Header welcome={welcome} name={store.currentUser ? store.currentUser.username : "Guest"} showBackButton={false} showAddButton={true} />
+            <Header welcome={welcome} name={store.currentUser ? store.currentUser.username : "Guest!"} showBackButton={false} showAddButton={true} />
             <div className="mt-3" style={{ marginTop: '-25px', display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ width: showChart ? '40%' : '100%' }}>
                     <div onClick={toggleChart} style={{ cursor: 'pointer' }}>
-                        <BudgetPanel title={"Net Worth"} total={formatCurrency(store.total_assets - store.total_liabilities)} duration={calculateDuration(netWorth)} lastUpdated={formatDate(netWorthLastUpdated)} />
+                        <BudgetPanel title={"Net Worth"} total={formatCurrency(store.total_assets - store.total_liabilities)} duration={calculateDuration(netWorth)} lastUpdated={netWorthLastUpdated.toLocaleDateString()} />
                     </div>
-                    <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(store.total_assets)} duration={calculateDuration(store.total_assets)} lastUpdated={formatDate(assetsData.lastUpdated)} edit={"edit/update"} name={"assets"} />
-                    <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(store.total_liabilities)} duration={calculateDuration(store.total_liabilities)} lastUpdated={formatDate(liabilitiesData.lastUpdated)} edit={"edit/update"} name={"liabilities"} />
+                    <BudgetPanel title={"Total Assets/Income"} total={formatCurrency(store.total_assets)} duration={calculateDuration(store.total_assets)} lastUpdated={mostRecentAssetsDate.toLocaleDateString()} edit={"edit/update"} name={"assets"} />
+                    <BudgetPanel title={"Total Debt/Liabilities"} total={formatCurrency(store.total_liabilities)} duration={calculateDuration(store.total_liabilities)} lastUpdated={mostRecentLiabilitiesDate.toLocaleDateString()} edit={"edit/update"} name={"liabilities"} />
                 </div>
                 {showChart && (
                     <div style={{ width: '55%' }}>
                         <ResponsiveContainer width="100%" height={400}>
                             <BarChart data={generateDummyData()}
+                                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="month" />

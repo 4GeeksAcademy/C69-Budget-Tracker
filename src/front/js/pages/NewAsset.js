@@ -1,18 +1,21 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../component/header";
 import Form from "../component/form";
 import { BackendURL } from "../component/backendURL";
 import { Context } from "../store/appContext";
+import { useNavigate } from "react-router-dom";
+import { BackendURL } from "../component/backendURL";
+import { Context } from "../store/appContext";
 
 export default function NewAsset() {
-  const [category, setCategory] = useState("");
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState()
+  const [description, setDescription] = useState()
+  const [amount, setAmount] = useState()
   const [backendURL, setBackendURL] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
   const { actions } = useContext(Context);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const url = process.env.BACKEND_URL || "";
@@ -32,7 +35,7 @@ export default function NewAsset() {
       return;
     }
 
-    console.log("Submitting liability:", { category, description, amount });
+    console.log("Submitting assets:", { category, description, amount });
 
     try {
       setIsLoading(true);
@@ -86,16 +89,11 @@ export default function NewAsset() {
       setIsLoading(false);
     }
   };
-
-  if (!backendURL) {
-    return <BackendURL />;
-  }
-
   return (
     <div className="text-center">
       <Header back={<i className="fa-solid fa-chevron-left"></i>} page={"Add New Asset"} showBackButton />
-      <Form label={"Category"} value={category} setValue={setCategory} form={"Choose a category..."} />
-      <Form label={"Description"} value={description} setValue={setDescription} form={"Input a short description"} />
+      <Form label={"Category"} setValue={setCategory} form={"Choose a category..."} />
+      <Form label={"Description"} setValue={setDescription} form={"Input a short description"} />
       <Form
         label={"Amount"}
         value={amount}
@@ -103,10 +101,13 @@ export default function NewAsset() {
         type={"number"}
         form={"$0.00"}
         showButton
-        buttonText={isLoading ? "Adding..." : "Add Asset"}
+        buttonText={"Add Asset"}
+        onButtonClick={handleSubmit}
+      />
+      {/* <Form
         onButtonClick={handleSubmit}
         disabled={isLoading}
-      />
+      /> */}
     </div>
   );
 }
