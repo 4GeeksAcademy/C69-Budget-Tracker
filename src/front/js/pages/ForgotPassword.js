@@ -10,6 +10,7 @@ export const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     const [error, setErrMsg] = useState("");
     const [hasToken, setHasToken] = useState(false);
@@ -30,7 +31,7 @@ export const ForgotPassword = () => {
                     body: JSON.stringify({ email: email.toLowerCase() })
                 });
                 if (response.ok) {
-                    alert("An email has been sent to reset your password.")
+                    alert("An email has been sent to reset your password, if you don't see it please check your spam folder.")
                     navigate("/login")
                 } else {
                     const data = await response.json();

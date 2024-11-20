@@ -1,9 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../component/header";
 import Form from "../component/form";
 import { BackendURL } from "../component/backendURL";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
+import { BackendURL } from "../component/backendURL";
+import { Context } from "../store/appContext";
 
 export default function NewAsset() {
   const [category, setCategory] = useState()
@@ -87,7 +90,6 @@ export default function NewAsset() {
     }
   };
   return (
-
     <div className="text-center">
       <Header back={<i className="fa-solid fa-chevron-left"></i>} page={"Add New Asset"} showBackButton />
       <Form label={"Category"} setValue={setCategory} form={"Choose a category..."} />

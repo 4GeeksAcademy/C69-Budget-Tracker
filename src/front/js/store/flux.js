@@ -1,3 +1,5 @@
+
+
 const getState = ({ getStore, getActions, setStore }) => {
 
     return {
@@ -8,6 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             total_liabilities: 0,
             currentUser: null, // Stores the current user's data
             currentUserPreferences: null, // Stores the current user's preferences
+            quotes: null,
         },
         actions: {
 
@@ -33,35 +36,41 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            // getUserInfo: async () => {
-            //     try {
-            //         const response = await fetch(process.env.BACKEND_URL + "/api/user-info", {
-            //             method: "GET",
-            //             headers: {
-            //                 Authorization: "Bearer " + sessionStorage.getItem("token"),
-            //                 "Content-Type": "application/json"
-            //             },
+            // QUOTE NINJAS API
 
-            //         });
-            //         console.log("response from API get user flux", response);
-            //         if (response.ok) {
-            //             const data = await response.json();
-            //             console.log("response jsonified get user", data);
-            //             setStore({
-            //                 currentUser: data.user,
-            //                 currentUserPreferences: data.preferences,
+            getQuotes: async () => {
+                try {
+                    const response = await fetch("https://api.api-ninjas.com/v1/quotes?category=money", {
+                        method: "GET",
+                        headers: {
+                            'X-Api-Key': process.env.API_NINJAS_KEY,
+                            "Content-Type": "application/json",
+                        },
 
-            //             });
-            //         } else {
-            //             const dataError = await response.json();
-            //             console.error("Error fetching user info", dataError.message);
-            //             alert(dataError.message)
-            //         }
 
-            //     } catch (error) {
-            //         console.error("Error loading user", error);
+                    })
+                    if (!response.ok) { throw new Error(`Error: ${response.statusText}`) }
+                    const result = await response.json();
+                    setStore({ quotes: result })
+                    console.log("result from API Ninjas", result);
+                } catch (error) {
+                    console.error("error fetching quote", error.message)
+                }
+            },
+
+            //             var category = 'happiness'
+            //             $.ajax({
+            //             method: 'GET',
+            //             url: 'https://api.api-ninjas.com/v1/quotes?category=' + category,
+            //             headers: { 'X-Api-Key': 'YOUR_API_KEY'},
+            //             contentType: 'application/json',
+            //             success: function(result) {
+            //             console.log(result);
+            //     },
+            //             error: function ajaxError(jqXHR) {
+            //             console.error('Error: ', jqXHR.responseText);
             //     }
-            // },
+            // });
 
 
             fetchLiabilities: async () => {
@@ -252,11 +261,10 @@ const getState = ({ getStore, getActions, setStore }) => {
                     total_liabilities: updatedTotalLiabilities,
                 });
             },
-
-            addAssetToStore: (newAssets) => {
+            addAssetToStore: (newAsset) => {
                 const store = getStore();
-                const updatedAssets = [...store.assets, newAssets];
-                const updatedTotalAssets = store.total_assets + parseFloat(newAssets.amount);
+                const updatedAssets = [...store.assets, newAsset];
+                const updatedTotalAssets = store.total_assets + parseFloat(newAsset.amount);
                 setStore({
                     assets: updatedAssets,
                     total_assets: updatedTotalAssets,
@@ -319,6 +327,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     throw error;
                 }
             },
+            
         }
     };
 };
