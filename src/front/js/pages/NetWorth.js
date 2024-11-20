@@ -51,7 +51,6 @@ export default function NetWorth() {
                     const liabilities = await response.json();
                     const total = liabilities.reduce((sum, liability) => sum + parseFloat(liability.amount), 0);
                     const lastUpdated = liabilities.reduce((latest, liability) =>
-                    const lastUpdated = liabilities.reduce((latest, liability) =>
                         latest > new Date(liability.last_updated) ? latest : new Date(liability.last_updated),
                         new Date(0)
                     );
@@ -70,7 +69,6 @@ export default function NetWorth() {
                 if (response.ok) {
                     const assets = await response.json();
                     const total = assets.reduce((sum, asset) => sum + parseFloat(asset.amount), 0);
-                    const lastUpdated = assets.reduce((latest, asset) =>
                     const lastUpdated = assets.reduce((latest, asset) =>
                         latest > new Date(asset.last_updated) ? latest : new Date(asset.last_updated),
                         new Date(0)
