@@ -285,13 +285,13 @@ const getState = ({ getStore, getActions, setStore }) => {
                             text_frequency: newUser.text_frequency
                         }),
                     });
-                    console.log("response from signup:", response);
+                    // console.log("response from signup:", response);
                     const data = await response.json();
                     if (!response.ok) {
                         alert(data.message);
                         return false;
                     }
-                    console.log(data);
+                    // console.log(data);
                     return true;
                 } catch (error) {
                     console.error("Error during signup", error);

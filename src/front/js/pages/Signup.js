@@ -24,8 +24,8 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Password: ", userData.password);
-    console.log("Confirm Password: ", userData.confirmPassword);
+    // console.log("Password: ", userData.password);
+    // console.log("Confirm Password: ", userData.confirmPassword);
 
 
     if (userData.password !== userData.confirmPassword) {
@@ -43,7 +43,7 @@ export default function Signup() {
         
 
       });
-      console.log(success)
+      // console.log(success)
       if (success) {
         alert("Signup successful! Please login.");
         navigate("/login");
