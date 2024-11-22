@@ -47,7 +47,17 @@ export default function Liabilities() {
             <Header back={<i className="fa-solid fa-chevron-left"></i>} page={"Liabilities"} showBackButton={true} showAddButton={true} />
             <CategoryLabels category={"Category"} description={"Description"} amount={"Amount"} lastUpdated={"Last Updated"} />
             {store.liabilities.map((liability) => (
-                <InformationPanel key={liability.id} category={liability.category} description={liability.description} amount={parseFloat(liability.amount).toFixed(2)} lastUpdated={new Date(liability.last_updated).toLocaleDateString()} />))}
+                <InformationPanel
+                    key={liability.id}
+                    id={liability.id}
+                    category={liability.category}
+                    description={liability.description}
+                    amount={parseFloat(liability.amount).toFixed(2)}
+                    lastUpdated={new Date(liability.last_updated).toLocaleDateString()}
+                    onEdit={actions.updateLiability}
+                    onDelete={actions.deleteLiability}
+                />
+            ))}
         </div>
     );
 }

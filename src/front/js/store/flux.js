@@ -327,6 +327,99 @@ const getState = ({ getStore, getActions, setStore }) => {
                     throw error;
                 }
             },
+            updateLiability: async (liabilityId, updatedData) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}api/update-liability/${liabilityId}`, {
+                        method: "PUT",
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem("token"),
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(updatedData),
+                    });
+            
+                    if (response.ok) {
+                        const updatedLiability = await response.json();
+                        const store = getStore();
+                        const liabilities = store.liabilities.map((liability) =>
+                            liability.id === liabilityId ? updatedLiability : liability
+                        );
+                        setStore({ liabilities });
+                    } else {
+                        console.error("Failed to update liability");
+                    }
+                } catch (error) {
+                    console.error("Error updating liability:", error);
+                }
+            },
+            
+            deleteLiability: async (liabilityId) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}api/delete-liability/${liabilityId}`, {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem("token"),
+                        },
+                    });
+            
+                    if (response.ok) {
+                        const store = getStore();
+                        const liabilities = store.liabilities.filter((liability) => liability.id !== liabilityId);
+                        setStore({ liabilities });
+                    } else {
+                        console.error("Failed to delete liability");
+                    }
+                } catch (error) {
+                    console.error("Error deleting liability:", error);
+                }
+            },
+            
+            updateAsset: async (assetId, updatedData) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}api/update-asset/${assetId}`, {
+                        method: "PUT",
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem("token"),
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(updatedData),
+                    });
+            
+                    if (response.ok) {
+                        const updatedAsset = await response.json();
+                        const store = getStore();
+                        const assets = store.assets.map((asset) =>
+                            asset.id === assetId ? updatedAsset : asset
+                        );
+                        setStore({ assets });
+                    } else {
+                        console.error("Failed to update asset");
+                    }
+                } catch (error) {
+                    console.error("Error updating asset:", error);
+                }
+            },
+            
+            deleteAsset: async (assetId) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}api/delete-asset/${assetId}`, {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: "Bearer " + sessionStorage.getItem("token"),
+                        },
+                    });
+            
+                    if (response.ok) {
+                        const store = getStore();
+                        const assets = store.assets.filter((asset) => asset.id !== assetId);
+                        setStore({ assets });
+                    } else {
+                        console.error("Failed to delete asset");
+                    }
+                } catch (error) {
+                    console.error("Error deleting asset:", error);
+                }
+            },
             
         }
     };
