@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
+import EditModal from "./editModal";
+
 export default function InformationPanel(props) {
     const [showOptions, setShowOptions] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
+    const [showEditModal, setShowEditModal] = useState(false);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -21,18 +24,41 @@ export default function InformationPanel(props) {
     const handleOptionsClick = () => {
         setShowOptions(!showOptions);
     };
-
     const handleEditClick = () => {
-        // Implement edit functionality
-        console.log("Edit clicked");
+        const updatedData = {
+            category: props.category, // Replace with user input
+            description: props.description, // Replace with user input
+            amount: parseFloat(props.amount), // Replace with user input
+        };
+        props.onEdit(props.id, updatedData);
         setShowOptions(false);
+        setShowEditModal(true);
+    };
+    const handleModalClose = () => {
+        setShowEditModal(false);
+    };
+
+    const handleModalSave = (updatedData) => {
+        props.onEdit(props.id, updatedData);
+        setShowEditModal(false);
     };
 
     const handleDeleteClick = () => {
-        // Implement delete functionality
-        console.log("Delete clicked");
+        props.onDelete(props.id);
         setShowOptions(false);
     };
+
+    // const handleEditClick = () => {
+    //     // Implement edit functionality
+    //     console.log("Edit clicked");
+    //     setShowOptions(false);
+    // };
+
+    // const handleDeleteClick = () => {
+    //     // Implement delete functionality
+    //     console.log("Delete clicked");
+    //     setShowOptions(false);
+    // };
 
     return (
         <div className="card w-75 mx-auto m-2 rounded-4 shadow-sm border-light-subtle">
@@ -42,10 +68,10 @@ export default function InformationPanel(props) {
                 <div className="col-1 lh-1 text-truncate">${props.amount}</div>
                 <div className="col-1">{props.lastUpdated}</div>
                 <div ref={dropdownRef}>
-                    <button 
-                        type="button" 
-                        className="col-1 btn btn-sm btn-light-subtle text-muted shadow-none" 
-                        style={{ position: 'relative', top: '-9px', right: '50px' }} 
+                    <button
+                        type="button"
+                        className="col-1 btn btn-sm btn-light-subtle text-muted shadow-none"
+                        style={{ position: 'relative', top: '-9px', right: '50px' }}
                         onClick={handleOptionsClick}
                     >
                         <h3><i className="fa-solid fa-ellipsis"></i></h3>
@@ -65,7 +91,18 @@ export default function InformationPanel(props) {
                                 <i className="fa-solid fa-trash pt-1 me-3"></i> Delete
                             </button>
                         </div>
+
                     )}
+                    <EditModal
+                        show={showEditModal}
+                        onClose={handleModalClose}
+                        onSave={handleModalSave}
+                        initialData={{
+                            category: props.category,
+                            description: props.description,
+                            amount: props.amount,
+                        }}
+                    />
                 </div>
             </div>
         </div>

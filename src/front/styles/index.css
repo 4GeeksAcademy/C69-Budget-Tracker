@@ -5,3 +5,13 @@
     border-top-right-radius: .25rem !important;
     border-bottom-right-radius: .25rem !important;
 }
+
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-dialog {
+    max-width: 500px;
+}
